@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+package agent;
+
+message IngestionRef {
+  string ingestion_id = 1;
+  string file_url = 2;
+  map<string,string> metadata = 3;
+}
+
+message OCRRequest {
+  IngestionRef ingestion = 1;
+  string priority = 2; // low, normal, high
+}
+message OCRResponse {
+  string ocr_id = 1;
+  string status = 2;
+  string message = 3;
+}
+
+message MapRequest {
+  string ocr_id = 1;
+}
+message MapResponse {
+  string schema_id = 1;
+  string status = 2;
+  string mapped_schema_json = 3;
+}
+
+message ValidateRequest {
+  string schema_id = 1;
+  string ruleset = 2;
+}
+message ValidateResponse {
+  string validation_id = 1;
+  bool valid = 2;
+  repeated string errors = 3;
+  repeated string warnings = 4;
+}
+
+message ReportRequest {
+  string validation_id = 1;
+  string schema_id = 2;
+  string user_id = 3;
+}
+message ReportResponse {
+  string report_id = 1;
+  string status = 2;
+}
+
+message ConvertRequest {
+  string validation_id = 1;
+  string target = 2; // tally | zoho
+  bool dry_run = 3;
+}
+message ConvertResponse {
+  string conversion_id = 1;
+  string status = 2;
+  string artifact_url = 3;
+}
+
+message IntegrationRequest {
+  string conversion_id = 1;
+  string target = 2;      // tally | zoho
+  string credentials_id = 3;
+}
+message IntegrationResponse {
+  string integration_id = 1;
+  string status = 2;
+}
+
+message AgentEvent {
+  string agent = 1;
+  string event_type = 2;
+  string reference_id = 3;
+  string payload_json = 4;
+  int64 ts = 5;
+}
+message AgentAck {
+  string status = 1;
+  string message = 2;
+}
+
+service AgentComm {
+  rpc StartOCR(OCRRequest) returns (OCRResponse);
+  rpc MapSchema(MapRequest) returns (MapResponse);
+  rpc ValidateSchema(ValidateRequest) returns (ValidateResponse);
+  rpc GenerateReport(ReportRequest) returns (ReportResponse);
+  rpc Convert(ConvertRequest) returns (ConvertResponse);
+  rpc PushIntegration(IntegrationRequest) returns (IntegrationResponse);
+
+  // Optional event stream for A2A events
+  rpc EventStream(stream AgentEvent) returns (stream AgentAck);
+}

@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\tmcp.proto\x12\x03mcp\"\xaa\x01\n\nSaveDocReq\x12\x14\n\x0cingestion_id\x18\x01 \x01(\t\x12\x12\n\nfile_bytes\x18\x02 \x01(\x0c\x12\x10\n\x08\x66ile_url\x18\x03 \x01(\t\x12/\n\x08metadata\x18\x04 \x03(\x0b\x32\x1d.mcp.SaveDocReq.MetadataEntry\x1a/\n\rMetadataEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\";\n\x0bSaveDocResp\x12\n\n\x02ok\x18\x01 \x01(\x08\x12\x0f\n\x07\x64oc_ref\x18\x02 \x01(\t\x12\x0f\n\x07message\x18\x03 \x01(\t\"!\n\tGetDocReq\x12\x14\n\x0cingestion_id\x18\x01 \x01(\t\"\xa5\x01\n\nGetDocResp\x12\x0f\n\x07\x64oc_ref\x18\x01 \x01(\t\x12\x10\n\x08\x66ile_url\x18\x02 \x01(\t\x12\x12\n\nfile_bytes\x18\x03 \x01(\x0c\x12/\n\x08metadata\x18\x04 \x03(\x0b\x32\x1d.mcp.GetDocResp.MetadataEntry\x1a/\n\rMetadataEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x8c\x01\n\x0bQueryLLMReq\x12\x0e\n\x06prompt\x18\x01 \x01(\t\x12\r\n\x05model\x18\x02 \x01(\t\x12.\n\x07options\x18\x03 \x03(\x0b\x32\x1d.mcp.QueryLLMReq.OptionsEntry\x1a.\n\x0cOptionsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"F\n\x0cQueryLLMResp\x12\x0c\n\x04text\x18\x01 \x01(\t\x12\x12\n\nconfidence\x18\x02 \x01(\x02\x12\x14\n\x0craw_response\x18\x03 \x01(\t\"]\n\x0eWriteMetricReq\x12\r\n\x05\x61gent\x18\x01 \x01(\t\x12\x14\n\x0cingestion_id\x18\x02 \x01(\t\x12\x13\n\x0bmetric_json\x18\x03 \x01(\t\x12\x11\n\tmetric_ts\x18\x04 \x01(\x03\"\x16\n\x08WriteAck\x12\n\n\x02ok\x18\x01 \x01(\x08\"f\n\rWriteAuditReq\x12\r\n\x05\x61gent\x18\x01 \x01(\t\x12\x0e\n\x06\x61\x63tion\x18\x02 \x01(\t\x12\x14\n\x0creference_id\x18\x03 \x01(\t\x12\x14\n\x0cpayload_json\x18\x04 \x01(\t\x12\n\n\x02ts\x18\x05 \x01(\x03\x32\xfd\x01\n\x03MCP\x12\x31\n\x0cSaveDocument\x12\x0f.mcp.SaveDocReq\x1a\x10.mcp.SaveDocResp\x12.\n\x0bGetDocument\x12\x0e.mcp.GetDocReq\x1a\x0f.mcp.GetDocResp\x12/\n\x08QueryLLM\x12\x10.mcp.QueryLLMReq\x1a\x11.mcp.QueryLLMResp\x12\x31\n\x0bWriteMetric\x12\x13.mcp.WriteMetricReq\x1a\r.mcp.WriteAck\x12/\n\nWriteAudit\x12\x12.mcp.WriteAuditReq\x1a\r.mcp.WriteAckb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\tmcp.proto\x12\x03mcp\"\xbd\x01\n\nSaveDocReq\x12\x14\n\x0cingestion_id\x18\x01 \x01(\t\x12\x11\n\tfile_name\x18\x02 \x01(\t\x12\x12\n\nfile_bytes\x18\x03 \x01(\x0c\x12\x10\n\x08\x66ile_url\x18\x04 \x01(\t\x12/\n\x08metadata\x18\x05 \x03(\x0b\x32\x1d.mcp.SaveDocReq.MetadataEntry\x1a/\n\rMetadataEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\";\n\x0bSaveDocResp\x12\n\n\x02ok\x18\x01 \x01(\x08\x12\x0f\n\x07\x64oc_ref\x18\x02 \x01(\t\x12\x0f\n\x07message\x18\x03 \x01(\t\"!\n\tGetDocReq\x12\x14\n\x0cingestion_id\x18\x01 \x01(\t\"\xa5\x01\n\nGetDocResp\x12\x0f\n\x07\x64oc_ref\x18\x01 \x01(\t\x12\x10\n\x08\x66ile_url\x18\x02 \x01(\t\x12\x12\n\nfile_bytes\x18\x03 \x01(\x0c\x12/\n\x08metadata\x18\x04 \x03(\x0b\x32\x1d.mcp.GetDocResp.MetadataEntry\x1a/\n\rMetadataEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x8c\x01\n\x0bQueryLLMReq\x12\x0e\n\x06prompt\x18\x01 \x01(\t\x12\r\n\x05model\x18\x02 \x01(\t\x12.\n\x07options\x18\x03 \x03(\x0b\x32\x1d.mcp.QueryLLMReq.OptionsEntry\x1a.\n\x0cOptionsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"F\n\x0cQueryLLMResp\x12\x0c\n\x04text\x18\x01 \x01(\t\x12\x12\n\nconfidence\x18\x02 \x01(\x02\x12\x14\n\x0craw_response\x18\x03 \x01(\t\"]\n\x0eWriteMetricReq\x12\r\n\x05\x61gent\x18\x01 \x01(\t\x12\x14\n\x0cingestion_id\x18\x02 \x01(\t\x12\x13\n\x0bmetric_json\x18\x03 \x01(\t\x12\x11\n\tmetric_ts\x18\x04 \x01(\x03\"\x16\n\x08WriteAck\x12\n\n\x02ok\x18\x01 \x01(\x08\"f\n\rWriteAuditReq\x12\r\n\x05\x61gent\x18\x01 \x01(\t\x12\x0e\n\x06\x61\x63tion\x18\x02 \x01(\t\x12\x14\n\x0creference_id\x18\x03 \x01(\t\x12\x14\n\x0cpayload_json\x18\x04 \x01(\t\x12\n\n\x02ts\x18\x05 \x01(\x03\x32\xfd\x01\n\x03MCP\x12\x31\n\x0cSaveDocument\x12\x0f.mcp.SaveDocReq\x1a\x10.mcp.SaveDocResp\x12.\n\x0bGetDocument\x12\x0e.mcp.GetDocReq\x1a\x0f.mcp.GetDocResp\x12/\n\x08QueryLLM\x12\x10.mcp.QueryLLMReq\x1a\x11.mcp.QueryLLMResp\x12\x31\n\x0bWriteMetric\x12\x13.mcp.WriteMetricReq\x1a\r.mcp.WriteAck\x12/\n\nWriteAudit\x12\x12.mcp.WriteAuditReq\x1a\r.mcp.WriteAckb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -38,29 +38,29 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_QUERYLLMREQ_OPTIONSENTRY']._loaded_options = None
   _globals['_QUERYLLMREQ_OPTIONSENTRY']._serialized_options = b'8\001'
   _globals['_SAVEDOCREQ']._serialized_start=19
-  _globals['_SAVEDOCREQ']._serialized_end=189
-  _globals['_SAVEDOCREQ_METADATAENTRY']._serialized_start=142
-  _globals['_SAVEDOCREQ_METADATAENTRY']._serialized_end=189
-  _globals['_SAVEDOCRESP']._serialized_start=191
-  _globals['_SAVEDOCRESP']._serialized_end=250
-  _globals['_GETDOCREQ']._serialized_start=252
-  _globals['_GETDOCREQ']._serialized_end=285
-  _globals['_GETDOCRESP']._serialized_start=288
-  _globals['_GETDOCRESP']._serialized_end=453
-  _globals['_GETDOCRESP_METADATAENTRY']._serialized_start=142
-  _globals['_GETDOCRESP_METADATAENTRY']._serialized_end=189
-  _globals['_QUERYLLMREQ']._serialized_start=456
-  _globals['_QUERYLLMREQ']._serialized_end=596
-  _globals['_QUERYLLMREQ_OPTIONSENTRY']._serialized_start=550
-  _globals['_QUERYLLMREQ_OPTIONSENTRY']._serialized_end=596
-  _globals['_QUERYLLMRESP']._serialized_start=598
-  _globals['_QUERYLLMRESP']._serialized_end=668
-  _globals['_WRITEMETRICREQ']._serialized_start=670
-  _globals['_WRITEMETRICREQ']._serialized_end=763
-  _globals['_WRITEACK']._serialized_start=765
-  _globals['_WRITEACK']._serialized_end=787
-  _globals['_WRITEAUDITREQ']._serialized_start=789
-  _globals['_WRITEAUDITREQ']._serialized_end=891
-  _globals['_MCP']._serialized_start=894
-  _globals['_MCP']._serialized_end=1147
+  _globals['_SAVEDOCREQ']._serialized_end=208
+  _globals['_SAVEDOCREQ_METADATAENTRY']._serialized_start=161
+  _globals['_SAVEDOCREQ_METADATAENTRY']._serialized_end=208
+  _globals['_SAVEDOCRESP']._serialized_start=210
+  _globals['_SAVEDOCRESP']._serialized_end=269
+  _globals['_GETDOCREQ']._serialized_start=271
+  _globals['_GETDOCREQ']._serialized_end=304
+  _globals['_GETDOCRESP']._serialized_start=307
+  _globals['_GETDOCRESP']._serialized_end=472
+  _globals['_GETDOCRESP_METADATAENTRY']._serialized_start=161
+  _globals['_GETDOCRESP_METADATAENTRY']._serialized_end=208
+  _globals['_QUERYLLMREQ']._serialized_start=475
+  _globals['_QUERYLLMREQ']._serialized_end=615
+  _globals['_QUERYLLMREQ_OPTIONSENTRY']._serialized_start=569
+  _globals['_QUERYLLMREQ_OPTIONSENTRY']._serialized_end=615
+  _globals['_QUERYLLMRESP']._serialized_start=617
+  _globals['_QUERYLLMRESP']._serialized_end=687
+  _globals['_WRITEMETRICREQ']._serialized_start=689
+  _globals['_WRITEMETRICREQ']._serialized_end=782
+  _globals['_WRITEACK']._serialized_start=784
+  _globals['_WRITEACK']._serialized_end=806
+  _globals['_WRITEAUDITREQ']._serialized_start=808
+  _globals['_WRITEAUDITREQ']._serialized_end=910
+  _globals['_MCP']._serialized_start=913
+  _globals['_MCP']._serialized_end=1166
 # @@protoc_insertion_point(module_scope)

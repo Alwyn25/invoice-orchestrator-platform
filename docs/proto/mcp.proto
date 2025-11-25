@@ -4,9 +4,10 @@ package mcp;
 
 message SaveDocReq {
   string ingestion_id = 1;
-  bytes file_bytes = 2;
-  string file_url = 3;
-  map<string,string> metadata = 4;
+  string file_name = 2;
+  bytes file_bytes = 3;
+  string file_url = 4;
+  map<string,string> metadata = 5;
 }
 
 message SaveDocResp {
