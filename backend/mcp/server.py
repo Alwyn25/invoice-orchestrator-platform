@@ -31,7 +31,7 @@ class MCPServicer(mcp_pb2_grpc.MCPServicer):
 
         doc = repository.save_document(
             ingestion_id=request.ingestion_id,
-            file_name="", # file_name is not in the new proto, pass empty
+            file_name=request.file_name,
             file_url=request.file_url,
             metadata=metadata_dict
         )
