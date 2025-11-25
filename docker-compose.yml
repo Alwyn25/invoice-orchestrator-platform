@@ -1,0 +1,136 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: invoice_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  mcp:
+    build:
+      context: .
+      dockerfile: backend/mcp/Dockerfile
+    ports:
+      - "50051:50051"
+    environment:
+      DATABASE_URL: "postgresql+psycopg2://user:password@postgres:5432/invoice_db"
+    depends_on:
+      - postgres
+
+  extraction-agent:
+    build:
+      context: .
+      dockerfile: backend/agents/extraction_agent/Dockerfile
+    container_name: extraction-agent
+    depends_on:
+      - mcp
+    environment:
+      - MCP_HOST=mcp
+      - MCP_PORT=50051
+    ports:
+      - "6001:6001"
+
+  mapping-agent:
+    build:
+      context: .
+      dockerfile: backend/agents/mapping_agent/Dockerfile
+    container_name: mapping-agent
+    depends_on:
+      - mcp
+    environment:
+      - MCP_HOST=mcp
+      - MCP_PORT=50051
+    ports:
+      - "6002:6002"
+
+  validation-agent:
+    build:
+      context: .
+      dockerfile: backend/agents/validation_agent/Dockerfile
+    container_name: validation-agent
+    depends_on:
+      - mcp
+    environment:
+      - MCP_HOST=mcp
+      - MCP_PORT=50051
+    ports:
+      - "6003:6003"
+
+  report-agent:
+    build:
+      context: .
+      dockerfile: backend/agents/report_agent/Dockerfile
+    container_name: report-agent
+    depends_on:
+      - mcp
+    environment:
+      - MCP_HOST=mcp
+      - MCP_PORT=50051
+    ports:
+      - "6004:6004"
+
+  conversion-agent:
+    build:
+      context: .
+      dockerfile: backend/agents/conversion_agent/Dockerfile
+    container_name: conversion-agent
+    depends_on:
+      - mcp
+    environment:
+      - MCP_HOST=mcp
+      - MCP_PORT=50051
+    ports:
+      - "6005:6005"
+
+  integration-agent:
+    build:
+      context: .
+      dockerfile: backend/agents/integration_agent/Dockerfile
+    container_name: integration-agent
+    depends_on:
+      - mcp
+    environment:
+      - MCP_HOST=mcp
+      - MCP_PORT=50051
+    ports:
+      - "6006:6006"
+
+  gateway:
+    build:
+      context: .
+      dockerfile: backend/gateway/Dockerfile
+    container_name: gateway
+    depends_on:
+      - mcp
+      - extraction-agent
+      - mapping-agent
+      - validation-agent
+      - report-agent
+      - conversion-agent
+      - integration-agent
+    environment:
+      - MCP_HOST=mcp
+      - MCP_PORT=50051
+      - EXTRACTION_AGENT_HOST=extraction-agent
+      - EXTRACTION_AGENT_PORT=6001
+      - MAPPING_AGENT_HOST=mapping-agent
+      - MAPPING_AGENT_PORT=6002
+      - VALIDATION_AGENT_HOST=validation-agent
+      - VALIDATION_AGENT_PORT=6003
+      - REPORT_AGENT_HOST=report-agent
+      - REPORT_AGENT_PORT=6004
+      - CONVERSION_AGENT_HOST=conversion-agent
+      - CONVERSION_AGENT_PORT=6005
+      - INTEGRATION_AGENT_HOST=integration-agent
+      - INTEGRATION_AGENT_PORT=6006
+    ports:
+      - "8000:8000"
+
+volumes:
+  postgres_data:
