@@ -3,7 +3,7 @@
 import grpc
 import warnings
 
-from . import agent_comm_pb2 as agent__comm__pb2
+from docs.proto import agent_comm_pb2 as docs_dot_proto_dot_agent__comm__pb2
 
 GRPC_GENERATED_VERSION = '1.76.0'
 GRPC_VERSION = grpc.__version__
@@ -18,7 +18,7 @@ except ImportError:
 if _version_not_supported:
     raise RuntimeError(
         f'The grpc package installed is at version {GRPC_VERSION},'
-        + ' but the generated code in agent_comm_pb2_grpc.py depends on'
+        + ' but the generated code in docs/proto/agent_comm_pb2_grpc.py depends on'
         + f' grpcio>={GRPC_GENERATED_VERSION}.'
         + f' Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}'
         + f' or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.'
@@ -36,38 +36,38 @@ class AgentCommStub(object):
         """
         self.StartOCR = channel.unary_unary(
                 '/agent.AgentComm/StartOCR',
-                request_serializer=agent__comm__pb2.OCRRequest.SerializeToString,
-                response_deserializer=agent__comm__pb2.OCRResponse.FromString,
+                request_serializer=docs_dot_proto_dot_agent__comm__pb2.OCRRequest.SerializeToString,
+                response_deserializer=docs_dot_proto_dot_agent__comm__pb2.OCRResponse.FromString,
                 _registered_method=True)
         self.MapSchema = channel.unary_unary(
                 '/agent.AgentComm/MapSchema',
-                request_serializer=agent__comm__pb2.MapRequest.SerializeToString,
-                response_deserializer=agent__comm__pb2.MapResponse.FromString,
+                request_serializer=docs_dot_proto_dot_agent__comm__pb2.MapRequest.SerializeToString,
+                response_deserializer=docs_dot_proto_dot_agent__comm__pb2.MapResponse.FromString,
                 _registered_method=True)
         self.ValidateSchema = channel.unary_unary(
                 '/agent.AgentComm/ValidateSchema',
-                request_serializer=agent__comm__pb2.ValidateRequest.SerializeToString,
-                response_deserializer=agent__comm__pb2.ValidateResponse.FromString,
+                request_serializer=docs_dot_proto_dot_agent__comm__pb2.ValidateRequest.SerializeToString,
+                response_deserializer=docs_dot_proto_dot_agent__comm__pb2.ValidateResponse.FromString,
                 _registered_method=True)
         self.GenerateReport = channel.unary_unary(
                 '/agent.AgentComm/GenerateReport',
-                request_serializer=agent__comm__pb2.ReportRequest.SerializeToString,
-                response_deserializer=agent__comm__pb2.ReportResponse.FromString,
+                request_serializer=docs_dot_proto_dot_agent__comm__pb2.ReportRequest.SerializeToString,
+                response_deserializer=docs_dot_proto_dot_agent__comm__pb2.ReportResponse.FromString,
                 _registered_method=True)
         self.Convert = channel.unary_unary(
                 '/agent.AgentComm/Convert',
-                request_serializer=agent__comm__pb2.ConvertRequest.SerializeToString,
-                response_deserializer=agent__comm__pb2.ConvertResponse.FromString,
+                request_serializer=docs_dot_proto_dot_agent__comm__pb2.ConvertRequest.SerializeToString,
+                response_deserializer=docs_dot_proto_dot_agent__comm__pb2.ConvertResponse.FromString,
                 _registered_method=True)
         self.PushIntegration = channel.unary_unary(
                 '/agent.AgentComm/PushIntegration',
-                request_serializer=agent__comm__pb2.IntegrationRequest.SerializeToString,
-                response_deserializer=agent__comm__pb2.IntegrationResponse.FromString,
+                request_serializer=docs_dot_proto_dot_agent__comm__pb2.IntegrationRequest.SerializeToString,
+                response_deserializer=docs_dot_proto_dot_agent__comm__pb2.IntegrationResponse.FromString,
                 _registered_method=True)
         self.EventStream = channel.stream_stream(
                 '/agent.AgentComm/EventStream',
-                request_serializer=agent__comm__pb2.AgentEvent.SerializeToString,
-                response_deserializer=agent__comm__pb2.AgentAck.FromString,
+                request_serializer=docs_dot_proto_dot_agent__comm__pb2.AgentEvent.SerializeToString,
+                response_deserializer=docs_dot_proto_dot_agent__comm__pb2.AgentAck.FromString,
                 _registered_method=True)
 
 
@@ -122,38 +122,38 @@ def add_AgentCommServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'StartOCR': grpc.unary_unary_rpc_method_handler(
                     servicer.StartOCR,
-                    request_deserializer=agent__comm__pb2.OCRRequest.FromString,
-                    response_serializer=agent__comm__pb2.OCRResponse.SerializeToString,
+                    request_deserializer=docs_dot_proto_dot_agent__comm__pb2.OCRRequest.FromString,
+                    response_serializer=docs_dot_proto_dot_agent__comm__pb2.OCRResponse.SerializeToString,
             ),
             'MapSchema': grpc.unary_unary_rpc_method_handler(
                     servicer.MapSchema,
-                    request_deserializer=agent__comm__pb2.MapRequest.FromString,
-                    response_serializer=agent__comm__pb2.MapResponse.SerializeToString,
+                    request_deserializer=docs_dot_proto_dot_agent__comm__pb2.MapRequest.FromString,
+                    response_serializer=docs_dot_proto_dot_agent__comm__pb2.MapResponse.SerializeToString,
             ),
             'ValidateSchema': grpc.unary_unary_rpc_method_handler(
                     servicer.ValidateSchema,
-                    request_deserializer=agent__comm__pb2.ValidateRequest.FromString,
-                    response_serializer=agent__comm__pb2.ValidateResponse.SerializeToString,
+                    request_deserializer=docs_dot_proto_dot_agent__comm__pb2.ValidateRequest.FromString,
+                    response_serializer=docs_dot_proto_dot_agent__comm__pb2.ValidateResponse.SerializeToString,
             ),
             'GenerateReport': grpc.unary_unary_rpc_method_handler(
                     servicer.GenerateReport,
-                    request_deserializer=agent__comm__pb2.ReportRequest.FromString,
-                    response_serializer=agent__comm__pb2.ReportResponse.SerializeToString,
+                    request_deserializer=docs_dot_proto_dot_agent__comm__pb2.ReportRequest.FromString,
+                    response_serializer=docs_dot_proto_dot_agent__comm__pb2.ReportResponse.SerializeToString,
             ),
             'Convert': grpc.unary_unary_rpc_method_handler(
                     servicer.Convert,
-                    request_deserializer=agent__comm__pb2.ConvertRequest.FromString,
-                    response_serializer=agent__comm__pb2.ConvertResponse.SerializeToString,
+                    request_deserializer=docs_dot_proto_dot_agent__comm__pb2.ConvertRequest.FromString,
+                    response_serializer=docs_dot_proto_dot_agent__comm__pb2.ConvertResponse.SerializeToString,
             ),
             'PushIntegration': grpc.unary_unary_rpc_method_handler(
                     servicer.PushIntegration,
-                    request_deserializer=agent__comm__pb2.IntegrationRequest.FromString,
-                    response_serializer=agent__comm__pb2.IntegrationResponse.SerializeToString,
+                    request_deserializer=docs_dot_proto_dot_agent__comm__pb2.IntegrationRequest.FromString,
+                    response_serializer=docs_dot_proto_dot_agent__comm__pb2.IntegrationResponse.SerializeToString,
             ),
             'EventStream': grpc.stream_stream_rpc_method_handler(
                     servicer.EventStream,
-                    request_deserializer=agent__comm__pb2.AgentEvent.FromString,
-                    response_serializer=agent__comm__pb2.AgentAck.SerializeToString,
+                    request_deserializer=docs_dot_proto_dot_agent__comm__pb2.AgentEvent.FromString,
+                    response_serializer=docs_dot_proto_dot_agent__comm__pb2.AgentAck.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -181,8 +181,8 @@ class AgentComm(object):
             request,
             target,
             '/agent.AgentComm/StartOCR',
-            agent__comm__pb2.OCRRequest.SerializeToString,
-            agent__comm__pb2.OCRResponse.FromString,
+            docs_dot_proto_dot_agent__comm__pb2.OCRRequest.SerializeToString,
+            docs_dot_proto_dot_agent__comm__pb2.OCRResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -208,8 +208,8 @@ class AgentComm(object):
             request,
             target,
             '/agent.AgentComm/MapSchema',
-            agent__comm__pb2.MapRequest.SerializeToString,
-            agent__comm__pb2.MapResponse.FromString,
+            docs_dot_proto_dot_agent__comm__pb2.MapRequest.SerializeToString,
+            docs_dot_proto_dot_agent__comm__pb2.MapResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -235,8 +235,8 @@ class AgentComm(object):
             request,
             target,
             '/agent.AgentComm/ValidateSchema',
-            agent__comm__pb2.ValidateRequest.SerializeToString,
-            agent__comm__pb2.ValidateResponse.FromString,
+            docs_dot_proto_dot_agent__comm__pb2.ValidateRequest.SerializeToString,
+            docs_dot_proto_dot_agent__comm__pb2.ValidateResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -262,8 +262,8 @@ class AgentComm(object):
             request,
             target,
             '/agent.AgentComm/GenerateReport',
-            agent__comm__pb2.ReportRequest.SerializeToString,
-            agent__comm__pb2.ReportResponse.FromString,
+            docs_dot_proto_dot_agent__comm__pb2.ReportRequest.SerializeToString,
+            docs_dot_proto_dot_agent__comm__pb2.ReportResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -289,8 +289,8 @@ class AgentComm(object):
             request,
             target,
             '/agent.AgentComm/Convert',
-            agent__comm__pb2.ConvertRequest.SerializeToString,
-            agent__comm__pb2.ConvertResponse.FromString,
+            docs_dot_proto_dot_agent__comm__pb2.ConvertRequest.SerializeToString,
+            docs_dot_proto_dot_agent__comm__pb2.ConvertResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -316,8 +316,8 @@ class AgentComm(object):
             request,
             target,
             '/agent.AgentComm/PushIntegration',
-            agent__comm__pb2.IntegrationRequest.SerializeToString,
-            agent__comm__pb2.IntegrationResponse.FromString,
+            docs_dot_proto_dot_agent__comm__pb2.IntegrationRequest.SerializeToString,
+            docs_dot_proto_dot_agent__comm__pb2.IntegrationResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -343,8 +343,8 @@ class AgentComm(object):
             request_iterator,
             target,
             '/agent.AgentComm/EventStream',
-            agent__comm__pb2.AgentEvent.SerializeToString,
-            agent__comm__pb2.AgentAck.FromString,
+            docs_dot_proto_dot_agent__comm__pb2.AgentEvent.SerializeToString,
+            docs_dot_proto_dot_agent__comm__pb2.AgentAck.FromString,
             options,
             channel_credentials,
             insecure,
