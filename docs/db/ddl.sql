@@ -40,7 +40,7 @@ CREATE INDEX idx_documents_ingested_status ON documents_ingested(status);
 
 -- Table: ocr_output
 CREATE TABLE ocr_output (
-    ocr_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    ocr_id VARCHAR PRIMARY KEY,
     ingestion_id VARCHAR NOT NULL,
     raw_text TEXT,
     detected_fields JSONB,
@@ -68,8 +68,8 @@ CREATE INDEX idx_ocr_output_ingestion_id ON ocr_output(ingestion_id);
 
 -- Table: mapped_schema
 CREATE TABLE mapped_schema (
-    schema_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    ocr_id BIGINT NOT NULL,
+    schema_id VARCHAR PRIMARY KEY,
+    ocr_id VARCHAR NOT NULL,
     mapped_data JSONB NOT NULL,
     mapping_confidence REAL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
@@ -89,8 +89,8 @@ COMMENT ON COLUMN mapped_schema.mapping_confidence IS 'Confidence score of the s
 
 -- Table: validation_logs
 CREATE TABLE validation_logs (
-    validation_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    schema_id BIGINT NOT NULL,
+    validation_id VARCHAR PRIMARY KEY,
+    schema_id VARCHAR NOT NULL,
     status validation_status_enum NOT NULL,
     errors JSONB,
     warnings JSONB,
@@ -112,8 +112,8 @@ COMMENT ON COLUMN validation_logs.warnings IS 'JSONB array of validation warning
 
 -- Table: conversion_logs
 CREATE TABLE conversion_logs (
-    conversion_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    validation_id BIGINT NOT NULL,
+    conversion_id VARCHAR PRIMARY KEY,
+    validation_id VARCHAR NOT NULL,
     target target_enum NOT NULL,
     output TEXT,
     artifact_url TEXT,
@@ -137,8 +137,8 @@ COMMENT ON COLUMN conversion_logs.status IS 'Status of the conversion process.';
 
 -- Table: integration_logs
 CREATE TABLE integration_logs (
-    integration_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    conversion_id BIGINT NOT NULL,
+    integration_id VARCHAR PRIMARY KEY,
+    conversion_id VARCHAR NOT NULL,
     target target_enum NOT NULL,
     platform_response TEXT,
     status integration_status_enum NOT NULL DEFAULT 'pending',
@@ -168,9 +168,9 @@ COMMENT ON COLUMN integration_logs.next_retry_at IS 'Timestamp for the next sche
 
 -- Table: reports
 CREATE TABLE reports (
-    report_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    validation_id BIGINT NOT NULL,
-    schema_id BIGINT NOT NULL,
+    report_id VARCHAR PRIMARY KEY,
+    validation_id VARCHAR NOT NULL,
+    schema_id VARCHAR NOT NULL,
     user_id VARCHAR(255),
     status report_status_enum NOT NULL DEFAULT 'generating',
     summary JSONB,
@@ -199,9 +199,9 @@ COMMENT ON COLUMN reports.report_url IS 'URL to the generated report file.';
 
 -- Table: warnings_logs
 CREATE TABLE warnings_logs (
-    warning_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    warning_id VARCHAR PRIMARY KEY,
     ingestion_id VARCHAR,
-    validation_id BIGINT,
+    validation_id VARCHAR,
     field_name VARCHAR(255),
     severity severity_enum NOT NULL,
     message TEXT NOT NULL,

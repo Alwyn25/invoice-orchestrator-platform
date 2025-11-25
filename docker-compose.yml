@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14-alpine
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: invoice_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  mcp:
+    build:
+      context: .
+      dockerfile: backend/mcp/Dockerfile
+    ports:
+      - "50051:50051"
+    environment:
+      DATABASE_URL: postgresql+psycopg2://user:password@postgres:5432/invoice_db
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
