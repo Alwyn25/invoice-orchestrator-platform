@@ -1,3 +1,120 @@
+# Workflow Diagram
+
+flowchart TD
+    %% Frontend
+    subgraph FE["Frontend Dashboard (Next.js)"]
+        FE_Upload["Upload Invoice"]
+        FE_Review["Human Review Queue"]
+        FE_Reports["Reports & Status"]
+        FE_Metrics["Metrics & KPIs"]
+    end
+
+    %% Gateway
+    subgraph GW["REST Gateway (FastAPI)"]
+        GW_Ingestion["/ingestion/upload"]
+        GW_Metrics["/metrics/*"]
+        GW_Reports["/reports/*"]
+        GW_Convert["/convert/*"]
+        GW_Integration["/integration/*"]
+        GW_Warnings["/warnings/*"]
+        GW_Orch["Orchestrator Client"]
+    end
+
+    %% Orchestrator
+    subgraph ORCH["Orchestrator (LangGraph Service)"]
+        ORCH_API["/orchestrate/{ingestion_id}"]
+        ORCH_HR_API["/human-review/{ingestion_id}/resolve"]
+        ORCH_FLOW["LangGraph Workflow Engine"]
+    end
+
+    %% MCP
+    subgraph MCP["MCP Service (gRPC)"]
+        MCP_API["gRPC API (SaveDocument, GetDocument, WriteMetric, WriteAudit)"]
+        MCP_DB["DB Access Layer"]
+        MCP_LLM["LLM Client"]
+    end
+
+    %% Agents
+    subgraph AGENTS["Agents (gRPC)"]
+        EXT["Extraction Agent - StartOCR"]
+        MAP["Mapping Agent - MapSchema"]
+        VAL["Validation Agent - ValidateSchema"]
+        REP["Report Agent - GenerateReport"]
+        CONV["Conversion Agent - Convert (Tally / Zoho)"]
+        INT["Integration Agent - PushIntegration"]
+    end
+
+    %% Database
+    subgraph DB["PostgreSQL"]
+        T_DOC["documents_ingested"]
+        T_OCR["ocr_output"]
+        T_MAP["mapped_schema"]
+        T_VAL["validation_logs"]
+        T_REP["reports"]
+        T_WARN["warnings_logs"]
+        T_CONV["conversion_logs"]
+        T_INT["integration_logs"]
+        T_MET["metrics"]
+        T_AUD["agent_audit"]
+    end
+
+    %% External platforms
+    subgraph EXT_SYS["External Platforms"]
+        TALLY["Tally ERP"]
+        ZOHO["Zoho Books"]
+    end
+
+    HR["Human Reviewer"]
+
+    %% Frontend -> Gateway
+    FE_Upload --|HTTP POST /ingestion/upload|--> GW_Ingestion
+    FE_Review --|HTTP GET/POST|--> GW_Reports
+    FE_Reports --|HTTP GET|--> GW_Reports
+    FE_Metrics --|HTTP GET /metrics/dashboard|--> GW_Metrics
+
+    %% Gateway -> MCP + Orchestrator
+    GW_Ingestion --|gRPC SaveDocument|--> MCP_API
+    GW_Ingestion --|HTTP POST /orchestrate/{ingestion_id}|--> ORCH_API
+
+    %% Orchestrator internals
+    ORCH_API --> ORCH_FLOW
+    ORCH_HR_API --> ORCH_FLOW
+
+    %% Orchestrator -> Agents
+    ORCH_FLOW --|StartOCR|--> EXT
+    ORCH_FLOW --|MapSchema|--> MAP
+    ORCH_FLOW --|ValidateSchema|--> VAL
+    ORCH_FLOW --|GenerateReport|--> REP
+    ORCH_FLOW --|Convert Tally/Zoho|--> CONV
+    ORCH_FLOW --|PushIntegration|--> INT
+
+    %% Agents -> MCP -> DB
+    EXT --|Write OCR data|--> MCP_API
+    MAP --|Write mapped_schema|--> MCP_API
+    VAL --|Write validation_logs, metrics|--> MCP_API
+    REP --|Write reports, warnings_logs|--> MCP_API
+    CONV --|Write conversion_logs|--> MCP_API
+    INT --|Write integration_logs|--> MCP_API
+
+    MCP_API --> MCP_DB
+    MCP_DB --> DB
+
+    %% MCP <-> LLM
+    MCP_API --> MCP_LLM
+
+    %% Integration Agent -> External Systems
+    INT --|HTTP/XML|--> TALLY
+    INT --|HTTP/JSON|--> ZOHO
+
+    %% Human-in-loop + review
+    ORCH_FLOW --|Flag for manual review|--> MCP_API
+    MCP_API --> DB
+
+    FE_Review --|Fetch pending reviews|--> GW_Reports
+    GW_Reports --> ORCH_API
+    HR --> FE_Review
+
+
 1) OpenAPI / Swagger (OpenAPI 3.0.3) — Full spec (YAML)
 
 Save as `openapi.yml`. It's long — paste into Swagger Editor to explore.
