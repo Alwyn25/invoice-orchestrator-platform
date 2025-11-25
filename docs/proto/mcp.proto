@@ -1,0 +1,95 @@
+syntax = "proto3";
+
+package mcp;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+// The Model/DB Control Plane service definition.
+service MCPService {
+  // Saves document metadata to the database.
+  rpc SaveDocument(SaveDocumentRequest) returns (SaveDocumentResponse);
+
+  // Retrieves document metadata from the database.
+  rpc GetDocument(GetDocumentRequest) returns (GetDocumentResponse);
+
+  // Writes a metric event to the database.
+  rpc WriteMetric(WriteMetricRequest) returns (StatusResponse);
+
+  // Writes an audit event to the database.
+  rpc WriteAudit(WriteAuditRequest) returns (StatusResponse);
+
+  // Queries the LLM (stub).
+  rpc QueryLLM(QueryLLMRequest) returns (QueryLLMResponse);
+}
+
+// ---- Message Definitions ----
+
+// For SaveDocument RPC
+message SaveDocumentRequest {
+  string ingestion_id = 1;
+  string file_name = 2;
+  optional string file_url = 3;
+  string source = 4;
+  google.protobuf.Struct metadata = 5;
+  string status = 6;
+}
+
+message SaveDocumentResponse {
+  string ingestion_id = 1;
+  string message = 2;
+}
+
+// For GetDocument RPC
+message GetDocumentRequest {
+  string ingestion_id = 1;
+}
+
+message Document {
+    string ingestion_id = 1;
+    string file_name = 2;
+    optional string file_url = 3;
+    string source = 4;
+    google.protobuf.Struct metadata = 5;
+    string status = 6;
+    google.protobuf.Timestamp created_at = 7;
+    google.protobuf.Timestamp updated_at = 8;
+}
+
+message GetDocumentResponse {
+  Document document = 1;
+}
+
+// For WriteMetric RPC
+message WriteMetricRequest {
+  string agent = 1;
+  optional string ingestion_id = 2;
+  google.protobuf.Timestamp metric_ts = 3;
+  google.protobuf.Struct metrics = 4;
+  google.protobuf.Struct tags = 5;
+}
+
+// For WriteAudit RPC
+message WriteAuditRequest {
+  string agent = 1;
+  string action = 2;
+  string reference_id = 3;
+  google.protobuf.Struct payload = 4;
+}
+
+// For QueryLLM RPC
+message QueryLLMRequest {
+  string prompt = 1;
+  google.protobuf.Struct context = 2;
+}
+
+message QueryLLMResponse {
+  string response_text = 1;
+  google.protobuf.Struct metadata = 2;
+}
+
+// Generic Status Response
+message StatusResponse {
+  bool success = 1;
+  string message = 2;
+}
