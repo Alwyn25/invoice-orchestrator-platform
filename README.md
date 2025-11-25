@@ -1,15 +1,4 @@
-Great — below is a complete, ready-to-use deliverable pack containing:
-
-1. 🔧 **Swagger / OpenAPI v3 spec** (YAML) for all REST endpoints
-2. 📡 **gRPC `.proto` contract files** for A2A and MCP (DB/LLM)
-3. 📊 **Dashboard UI mockups** (wireframes + component list + data sources)
-4. 💾 **Sample DB DDL + sample data dump** (SQL INSERTs) and **test invoice JSONs**
-
-You can copy/paste the OpenAPI YAML into Swagger Editor / Postman; the proto files are ready for `protoc` codegen; DB SQL runs on Postgres; mockups are precise for frontend implementation.
-
----
-
-# 1) OpenAPI / Swagger (OpenAPI 3.0.3) — Full spec (YAML)
+1) OpenAPI / Swagger (OpenAPI 3.0.3) — Full spec (YAML)
 
 Save as `openapi.yml`. It's long — paste into Swagger Editor to explore.
 
