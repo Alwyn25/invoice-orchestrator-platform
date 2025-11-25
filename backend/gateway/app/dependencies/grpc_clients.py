@@ -1,9 +1,9 @@
 from functools import lru_cache
 from fastapi import Depends
 
-from backend.gateway.app.services.mcp_client import MCPClient
-from backend.gateway.app.services.agents_client import AgentsClient
-from backend.gateway.app.dependencies.config import Settings, get_settings
+from backend.shared.clients.mcp import MCPClient
+from backend.shared.clients.agents import AgentsClient
+from backend.shared.dependencies.config import Settings, get_settings
 
 @lru_cache()
 def get_mcp_client(settings: Settings = Depends(get_settings)) -> MCPClient:

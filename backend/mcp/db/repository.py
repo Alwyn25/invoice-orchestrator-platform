@@ -4,7 +4,8 @@ from datetime import datetime, timezone
 from sqlalchemy.orm import Session
 
 from backend.mcp.db.engine import SessionLocal
-from backend.mcp.db.models import DocumentsIngested, Metrics, AgentAudit
+from backend.mcp.db.models import DocumentsIngested, Metrics, AgentAudit, Orchestrations
+from sqlalchemy.dialects.postgresql import insert
 
 logging.basicConfig(level=logging.INFO)
 
@@ -86,3 +87,32 @@ def write_audit(agent: str, action: str, reference_id: str, payload_json: str, t
     except (json.JSONDecodeError, Exception) as e:
         logging.error(f"Error writing audit event for agent {agent}: {e}")
         return False
+
+def save_orchestration(ingestion_id: str, state: dict):
+    """Saves or updates an orchestration state."""
+    try:
+        with SessionLocal() as session:
+            insert_stmt = insert(Orchestrations).values(
+                ingestion_id=ingestion_id,
+                state=state,
+                status=state.get("status", "UNKNOWN")
+            )
+            on_conflict_stmt = insert_stmt.on_conflict_do_update(
+                index_elements=['ingestion_id'],
+                set_=dict(state=state, status=state.get("status", "UNKNOWN"))
+            )
+            session.execute(on_conflict_stmt)
+            session.commit()
+            return True
+    except Exception as e:
+        logging.error(f"Error saving orchestration state for {ingestion_id}: {e}")
+        return False
+
+def get_orchestration(ingestion_id: str):
+    """Retrieves an orchestration state."""
+    try:
+        with SessionLocal() as session:
+            return session.query(Orchestrations).filter(Orchestrations.ingestion_id == ingestion_id).first()
+    except Exception as e:
+        logging.error(f"Error getting orchestration state for {ingestion_id}: {e}")
+        return None
