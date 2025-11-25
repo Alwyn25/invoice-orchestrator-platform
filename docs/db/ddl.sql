@@ -274,3 +274,14 @@ COMMENT ON COLUMN agent_audit.created_at IS 'Timestamp of the audit event.';
 -- Indexes for agent_audit
 CREATE INDEX idx_agent_audit_agent_created_at ON agent_audit(agent, created_at);
 CREATE INDEX idx_agent_audit_reference_id ON agent_audit(reference_id);
+
+-- Table: orchestrations
+CREATE TABLE orchestrations (
+    ingestion_id VARCHAR PRIMARY KEY,
+    state JSONB,
+    status VARCHAR(255),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+COMMENT ON TABLE orchestrations IS 'Stores the state of LangGraph orchestrations.';

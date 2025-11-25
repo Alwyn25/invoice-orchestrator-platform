@@ -104,3 +104,11 @@ class AgentAudit(Base):
     reference_id = sa.Column(sa.String)
     payload = sa.Column(JSONB)
     created_at = sa.Column(sa.TIMESTAMP(timezone=True), server_default=sa.func.now())
+
+class Orchestrations(Base):
+    __tablename__ = 'orchestrations'
+    ingestion_id = sa.Column(sa.String, primary_key=True)
+    state = sa.Column(JSONB)
+    status = sa.Column(sa.String)
+    created_at = sa.Column(sa.TIMESTAMP(timezone=True), server_default=sa.func.now())
+    updated_at = sa.Column(sa.TIMESTAMP(timezone=True), server_default=sa.func.now(), onupdate=sa.func.now())

@@ -4,6 +4,7 @@ import grpc
 
 # Import gRPC stubs and messages
 from backend.mcp.grpc import mcp_pb2, mcp_pb2_grpc
+import json
 
 # Import repository functions for DB access
 from backend.mcp.db import repository
@@ -121,6 +122,33 @@ class MCPServicer(mcp_pb2_grpc.MCPServicer):
             context.set_code(grpc.StatusCode.INTERNAL)
 
         return mcp_pb2.WriteAck(ok=success)
+
+    def SaveOrchestration(self, request, context):
+        """Saves orchestration state to the database."""
+        logging.info(f"SaveOrchestration called for ingestion_id: {request.ingestion_id}")
+        state_dict = json.loads(request.state_bytes)
+        success = repository.save_orchestration(
+            ingestion_id=request.ingestion_id,
+            state=state_dict
+        )
+        if not success:
+            context.set_details("Failed to save orchestration state.")
+            context.set_code(grpc.StatusCode.INTERNAL)
+        return mcp_pb2.WriteAck(ok=success)
+
+    def GetOrchestration(self, request, context):
+        """Retrieves orchestration state from the database."""
+        logging.info(f"GetOrchestration called for ingestion_id: {request.ingestion_id}")
+        orchestration = repository.get_orchestration(request.ingestion_id)
+        if orchestration:
+            return mcp_pb2.OrchestrationState(
+                ingestion_id=orchestration.ingestion_id,
+                state_bytes=json.dumps(orchestration.state).encode('utf-8')
+            )
+        else:
+            context.set_details(f"Orchestration with ingestion_id '{request.ingestion_id}' not found.")
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            return mcp_pb2.OrchestrationState()
 
 
 def serve():

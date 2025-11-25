@@ -59,6 +59,16 @@ class MCPStub(object):
                 request_serializer=docs_dot_proto_dot_mcp__pb2.WriteAuditReq.SerializeToString,
                 response_deserializer=docs_dot_proto_dot_mcp__pb2.WriteAck.FromString,
                 _registered_method=True)
+        self.SaveOrchestration = channel.unary_unary(
+                '/mcp.MCP/SaveOrchestration',
+                request_serializer=docs_dot_proto_dot_mcp__pb2.OrchestrationState.SerializeToString,
+                response_deserializer=docs_dot_proto_dot_mcp__pb2.WriteAck.FromString,
+                _registered_method=True)
+        self.GetOrchestration = channel.unary_unary(
+                '/mcp.MCP/GetOrchestration',
+                request_serializer=docs_dot_proto_dot_mcp__pb2.GetDocReq.SerializeToString,
+                response_deserializer=docs_dot_proto_dot_mcp__pb2.OrchestrationState.FromString,
+                _registered_method=True)
 
 
 class MCPServicer(object):
@@ -94,6 +104,18 @@ class MCPServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def SaveOrchestration(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetOrchestration(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_MCPServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -121,6 +143,16 @@ def add_MCPServicer_to_server(servicer, server):
                     servicer.WriteAudit,
                     request_deserializer=docs_dot_proto_dot_mcp__pb2.WriteAuditReq.FromString,
                     response_serializer=docs_dot_proto_dot_mcp__pb2.WriteAck.SerializeToString,
+            ),
+            'SaveOrchestration': grpc.unary_unary_rpc_method_handler(
+                    servicer.SaveOrchestration,
+                    request_deserializer=docs_dot_proto_dot_mcp__pb2.OrchestrationState.FromString,
+                    response_serializer=docs_dot_proto_dot_mcp__pb2.WriteAck.SerializeToString,
+            ),
+            'GetOrchestration': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetOrchestration,
+                    request_deserializer=docs_dot_proto_dot_mcp__pb2.GetDocReq.FromString,
+                    response_serializer=docs_dot_proto_dot_mcp__pb2.OrchestrationState.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -258,6 +290,60 @@ class MCP(object):
             '/mcp.MCP/WriteAudit',
             docs_dot_proto_dot_mcp__pb2.WriteAuditReq.SerializeToString,
             docs_dot_proto_dot_mcp__pb2.WriteAck.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def SaveOrchestration(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/mcp.MCP/SaveOrchestration',
+            docs_dot_proto_dot_mcp__pb2.OrchestrationState.SerializeToString,
+            docs_dot_proto_dot_mcp__pb2.WriteAck.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetOrchestration(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/mcp.MCP/GetOrchestration',
+            docs_dot_proto_dot_mcp__pb2.GetDocReq.SerializeToString,
+            docs_dot_proto_dot_mcp__pb2.OrchestrationState.FromString,
             options,
             channel_credentials,
             insecure,

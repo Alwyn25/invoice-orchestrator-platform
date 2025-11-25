@@ -58,10 +58,17 @@ message WriteAuditReq {
   int64 ts = 5;
 }
 
+message OrchestrationState {
+  string ingestion_id = 1;
+  bytes state_bytes = 2;
+}
+
 service MCP {
   rpc SaveDocument(SaveDocReq) returns (SaveDocResp);
   rpc GetDocument(GetDocReq) returns (GetDocResp);
   rpc QueryLLM(QueryLLMReq) returns (QueryLLMResp);
   rpc WriteMetric(WriteMetricReq) returns (WriteAck);
   rpc WriteAudit(WriteAuditReq) returns (WriteAck);
+  rpc SaveOrchestration(OrchestrationState) returns (WriteAck);
+  rpc GetOrchestration(GetDocReq) returns (OrchestrationState);
 }
