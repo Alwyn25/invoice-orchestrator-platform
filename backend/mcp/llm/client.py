@@ -1,21 +1,20 @@
-import logging
-
 class LLMClient:
-    """A stub for the LLM client."""
+    """A fake LLM client that returns a deterministic dummy response."""
 
-    def query(self, prompt: str, context: dict) -> dict:
+    def query(self, prompt: str, model: str = "fake-model", options: dict | None = None) -> dict:
         """
-        Queries the LLM with a prompt and context.
-        This is a stub and returns a dummy response.
+        Simulates querying an LLM.
+
+        Args:
+            prompt: The input prompt for the LLM.
+            model: The model to use (ignored in this fake client).
+            options: Additional options for the LLM call (ignored).
+
+        Returns:
+            A dictionary containing a fake LLM response.
         """
-        logging.info(f"Querying LLM with prompt: {prompt}")
         return {
-            "response_text": f"This is a dummy response to the prompt: '{prompt}'",
-            "metadata": {
-                "model_name": "stub-model-v1",
-                "prompt_tokens": len(prompt.split()),
-                "response_tokens": 10,
-            },
+            "text": f"FAKE_LLM_RESPONSE for: {prompt[:50]}",
+            "confidence": 0.99,
+            "raw_response": "{}",
         }
-
-llm_client = LLMClient()

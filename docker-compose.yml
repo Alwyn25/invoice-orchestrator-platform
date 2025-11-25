@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   postgres:
-    image: postgres:14-alpine
+    image: postgres:15
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
@@ -19,7 +19,7 @@ services:
     ports:
       - "50051:50051"
     environment:
-      DATABASE_URL: postgresql+psycopg2://user:password@postgres:5432/invoice_db
+      DATABASE_URL: "postgresql+psycopg2://user:password@postgres:5432/invoice_db"
     depends_on:
       - postgres
 

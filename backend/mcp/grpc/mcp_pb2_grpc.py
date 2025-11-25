@@ -25,9 +25,8 @@ if _version_not_supported:
     )
 
 
-class MCPServiceStub(object):
-    """The Model/DB Control Plane service definition.
-    """
+class MCPStub(object):
+    """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
         """Constructor.
@@ -36,110 +35,103 @@ class MCPServiceStub(object):
             channel: A grpc.Channel.
         """
         self.SaveDocument = channel.unary_unary(
-                '/mcp.MCPService/SaveDocument',
-                request_serializer=mcp__pb2.SaveDocumentRequest.SerializeToString,
-                response_deserializer=mcp__pb2.SaveDocumentResponse.FromString,
+                '/mcp.MCP/SaveDocument',
+                request_serializer=mcp__pb2.SaveDocReq.SerializeToString,
+                response_deserializer=mcp__pb2.SaveDocResp.FromString,
                 _registered_method=True)
         self.GetDocument = channel.unary_unary(
-                '/mcp.MCPService/GetDocument',
-                request_serializer=mcp__pb2.GetDocumentRequest.SerializeToString,
-                response_deserializer=mcp__pb2.GetDocumentResponse.FromString,
-                _registered_method=True)
-        self.WriteMetric = channel.unary_unary(
-                '/mcp.MCPService/WriteMetric',
-                request_serializer=mcp__pb2.WriteMetricRequest.SerializeToString,
-                response_deserializer=mcp__pb2.StatusResponse.FromString,
-                _registered_method=True)
-        self.WriteAudit = channel.unary_unary(
-                '/mcp.MCPService/WriteAudit',
-                request_serializer=mcp__pb2.WriteAuditRequest.SerializeToString,
-                response_deserializer=mcp__pb2.StatusResponse.FromString,
+                '/mcp.MCP/GetDocument',
+                request_serializer=mcp__pb2.GetDocReq.SerializeToString,
+                response_deserializer=mcp__pb2.GetDocResp.FromString,
                 _registered_method=True)
         self.QueryLLM = channel.unary_unary(
-                '/mcp.MCPService/QueryLLM',
-                request_serializer=mcp__pb2.QueryLLMRequest.SerializeToString,
-                response_deserializer=mcp__pb2.QueryLLMResponse.FromString,
+                '/mcp.MCP/QueryLLM',
+                request_serializer=mcp__pb2.QueryLLMReq.SerializeToString,
+                response_deserializer=mcp__pb2.QueryLLMResp.FromString,
+                _registered_method=True)
+        self.WriteMetric = channel.unary_unary(
+                '/mcp.MCP/WriteMetric',
+                request_serializer=mcp__pb2.WriteMetricReq.SerializeToString,
+                response_deserializer=mcp__pb2.WriteAck.FromString,
+                _registered_method=True)
+        self.WriteAudit = channel.unary_unary(
+                '/mcp.MCP/WriteAudit',
+                request_serializer=mcp__pb2.WriteAuditReq.SerializeToString,
+                response_deserializer=mcp__pb2.WriteAck.FromString,
                 _registered_method=True)
 
 
-class MCPServiceServicer(object):
-    """The Model/DB Control Plane service definition.
-    """
+class MCPServicer(object):
+    """Missing associated documentation comment in .proto file."""
 
     def SaveDocument(self, request, context):
-        """Saves document metadata to the database.
-        """
+        """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def GetDocument(self, request, context):
-        """Retrieves document metadata from the database.
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def WriteMetric(self, request, context):
-        """Writes a metric event to the database.
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def WriteAudit(self, request, context):
-        """Writes an audit event to the database.
-        """
+        """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def QueryLLM(self, request, context):
-        """Queries the LLM (stub).
-        """
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def WriteMetric(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def WriteAudit(self, request, context):
+        """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
 
-def add_MCPServiceServicer_to_server(servicer, server):
+def add_MCPServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'SaveDocument': grpc.unary_unary_rpc_method_handler(
                     servicer.SaveDocument,
-                    request_deserializer=mcp__pb2.SaveDocumentRequest.FromString,
-                    response_serializer=mcp__pb2.SaveDocumentResponse.SerializeToString,
+                    request_deserializer=mcp__pb2.SaveDocReq.FromString,
+                    response_serializer=mcp__pb2.SaveDocResp.SerializeToString,
             ),
             'GetDocument': grpc.unary_unary_rpc_method_handler(
                     servicer.GetDocument,
-                    request_deserializer=mcp__pb2.GetDocumentRequest.FromString,
-                    response_serializer=mcp__pb2.GetDocumentResponse.SerializeToString,
-            ),
-            'WriteMetric': grpc.unary_unary_rpc_method_handler(
-                    servicer.WriteMetric,
-                    request_deserializer=mcp__pb2.WriteMetricRequest.FromString,
-                    response_serializer=mcp__pb2.StatusResponse.SerializeToString,
-            ),
-            'WriteAudit': grpc.unary_unary_rpc_method_handler(
-                    servicer.WriteAudit,
-                    request_deserializer=mcp__pb2.WriteAuditRequest.FromString,
-                    response_serializer=mcp__pb2.StatusResponse.SerializeToString,
+                    request_deserializer=mcp__pb2.GetDocReq.FromString,
+                    response_serializer=mcp__pb2.GetDocResp.SerializeToString,
             ),
             'QueryLLM': grpc.unary_unary_rpc_method_handler(
                     servicer.QueryLLM,
-                    request_deserializer=mcp__pb2.QueryLLMRequest.FromString,
-                    response_serializer=mcp__pb2.QueryLLMResponse.SerializeToString,
+                    request_deserializer=mcp__pb2.QueryLLMReq.FromString,
+                    response_serializer=mcp__pb2.QueryLLMResp.SerializeToString,
+            ),
+            'WriteMetric': grpc.unary_unary_rpc_method_handler(
+                    servicer.WriteMetric,
+                    request_deserializer=mcp__pb2.WriteMetricReq.FromString,
+                    response_serializer=mcp__pb2.WriteAck.SerializeToString,
+            ),
+            'WriteAudit': grpc.unary_unary_rpc_method_handler(
+                    servicer.WriteAudit,
+                    request_deserializer=mcp__pb2.WriteAuditReq.FromString,
+                    response_serializer=mcp__pb2.WriteAck.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'mcp.MCPService', rpc_method_handlers)
+            'mcp.MCP', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('mcp.MCPService', rpc_method_handlers)
+    server.add_registered_method_handlers('mcp.MCP', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
-class MCPService(object):
-    """The Model/DB Control Plane service definition.
-    """
+class MCP(object):
+    """Missing associated documentation comment in .proto file."""
 
     @staticmethod
     def SaveDocument(request,
@@ -155,9 +147,9 @@ class MCPService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/mcp.MCPService/SaveDocument',
-            mcp__pb2.SaveDocumentRequest.SerializeToString,
-            mcp__pb2.SaveDocumentResponse.FromString,
+            '/mcp.MCP/SaveDocument',
+            mcp__pb2.SaveDocReq.SerializeToString,
+            mcp__pb2.SaveDocResp.FromString,
             options,
             channel_credentials,
             insecure,
@@ -182,63 +174,9 @@ class MCPService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/mcp.MCPService/GetDocument',
-            mcp__pb2.GetDocumentRequest.SerializeToString,
-            mcp__pb2.GetDocumentResponse.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-            _registered_method=True)
-
-    @staticmethod
-    def WriteMetric(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(
-            request,
-            target,
-            '/mcp.MCPService/WriteMetric',
-            mcp__pb2.WriteMetricRequest.SerializeToString,
-            mcp__pb2.StatusResponse.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-            _registered_method=True)
-
-    @staticmethod
-    def WriteAudit(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(
-            request,
-            target,
-            '/mcp.MCPService/WriteAudit',
-            mcp__pb2.WriteAuditRequest.SerializeToString,
-            mcp__pb2.StatusResponse.FromString,
+            '/mcp.MCP/GetDocument',
+            mcp__pb2.GetDocReq.SerializeToString,
+            mcp__pb2.GetDocResp.FromString,
             options,
             channel_credentials,
             insecure,
@@ -263,9 +201,63 @@ class MCPService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/mcp.MCPService/QueryLLM',
-            mcp__pb2.QueryLLMRequest.SerializeToString,
-            mcp__pb2.QueryLLMResponse.FromString,
+            '/mcp.MCP/QueryLLM',
+            mcp__pb2.QueryLLMReq.SerializeToString,
+            mcp__pb2.QueryLLMResp.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def WriteMetric(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/mcp.MCP/WriteMetric',
+            mcp__pb2.WriteMetricReq.SerializeToString,
+            mcp__pb2.WriteAck.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def WriteAudit(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/mcp.MCP/WriteAudit',
+            mcp__pb2.WriteAuditReq.SerializeToString,
+            mcp__pb2.WriteAck.FromString,
             options,
             channel_credentials,
             insecure,

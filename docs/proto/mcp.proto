@@ -2,94 +2,65 @@ syntax = "proto3";
 
 package mcp;
 
-import "google/protobuf/struct.proto";
-import "google/protobuf/timestamp.proto";
-
-// The Model/DB Control Plane service definition.
-service MCPService {
-  // Saves document metadata to the database.
-  rpc SaveDocument(SaveDocumentRequest) returns (SaveDocumentResponse);
-
-  // Retrieves document metadata from the database.
-  rpc GetDocument(GetDocumentRequest) returns (GetDocumentResponse);
-
-  // Writes a metric event to the database.
-  rpc WriteMetric(WriteMetricRequest) returns (StatusResponse);
-
-  // Writes an audit event to the database.
-  rpc WriteAudit(WriteAuditRequest) returns (StatusResponse);
-
-  // Queries the LLM (stub).
-  rpc QueryLLM(QueryLLMRequest) returns (QueryLLMResponse);
-}
-
-// ---- Message Definitions ----
-
-// For SaveDocument RPC
-message SaveDocumentRequest {
+message SaveDocReq {
   string ingestion_id = 1;
-  string file_name = 2;
-  optional string file_url = 3;
-  string source = 4;
-  google.protobuf.Struct metadata = 5;
-  string status = 6;
+  bytes file_bytes = 2;
+  string file_url = 3;
+  map<string,string> metadata = 4;
 }
 
-message SaveDocumentResponse {
-  string ingestion_id = 1;
-  string message = 2;
+message SaveDocResp {
+  bool ok = 1;
+  string doc_ref = 2;
+  string message = 3;
 }
 
-// For GetDocument RPC
-message GetDocumentRequest {
+message GetDocReq {
   string ingestion_id = 1;
 }
 
-message Document {
-    string ingestion_id = 1;
-    string file_name = 2;
-    optional string file_url = 3;
-    string source = 4;
-    google.protobuf.Struct metadata = 5;
-    string status = 6;
-    google.protobuf.Timestamp created_at = 7;
-    google.protobuf.Timestamp updated_at = 8;
+message GetDocResp {
+  string doc_ref = 1;
+  string file_url = 2;
+  bytes file_bytes = 3;
+  map<string,string> metadata = 4;
 }
 
-message GetDocumentResponse {
-  Document document = 1;
+message QueryLLMReq {
+  string prompt = 1;
+  string model = 2;
+  map<string,string> options = 3;
 }
 
-// For WriteMetric RPC
-message WriteMetricRequest {
+message QueryLLMResp {
+  string text = 1;
+  float confidence = 2;
+  string raw_response = 3;
+}
+
+message WriteMetricReq {
   string agent = 1;
-  optional string ingestion_id = 2;
-  google.protobuf.Timestamp metric_ts = 3;
-  google.protobuf.Struct metrics = 4;
-  google.protobuf.Struct tags = 5;
+  string ingestion_id = 2;
+  string metric_json = 3;
+  int64 metric_ts = 4;
 }
 
-// For WriteAudit RPC
-message WriteAuditRequest {
+message WriteAck {
+  bool ok = 1;
+}
+
+message WriteAuditReq {
   string agent = 1;
   string action = 2;
   string reference_id = 3;
-  google.protobuf.Struct payload = 4;
+  string payload_json = 4;
+  int64 ts = 5;
 }
 
-// For QueryLLM RPC
-message QueryLLMRequest {
-  string prompt = 1;
-  google.protobuf.Struct context = 2;
-}
-
-message QueryLLMResponse {
-  string response_text = 1;
-  google.protobuf.Struct metadata = 2;
-}
-
-// Generic Status Response
-message StatusResponse {
-  bool success = 1;
-  string message = 2;
+service MCP {
+  rpc SaveDocument(SaveDocReq) returns (SaveDocResp);
+  rpc GetDocument(GetDocReq) returns (GetDocResp);
+  rpc QueryLLM(QueryLLMReq) returns (QueryLLMResp);
+  rpc WriteMetric(WriteMetricReq) returns (WriteAck);
+  rpc WriteAudit(WriteAuditReq) returns (WriteAck);
 }

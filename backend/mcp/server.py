@@ -1,146 +1,135 @@
 import logging
 from concurrent import futures
 import grpc
-from google.protobuf.json_format import MessageToDict, ParseDict
-from google.protobuf.timestamp_pb2 import Timestamp
 
-# Import gRPC stubs
-from backend.mcp.grpc import mcp_pb2
-from backend.mcp.grpc import mcp_pb2_grpc
+# Import gRPC stubs and messages
+from backend.mcp.grpc import mcp_pb2, mcp_pb2_grpc
 
-# Import database repository and models
+# Import repository functions for DB access
 from backend.mcp.db import repository
-from backend.mcp.db.models import DocumentsIngested
 
-# Import LLM client stub
-from backend.mcp.llm.client import llm_client
+# Import the fake LLM client
+from backend.mcp.llm.client import LLMClient
 
-# --- Helper Functions ---
+class MCPServicer(mcp_pb2_grpc.MCPServicer):
+    """Implements the MCP gRPC service."""
 
-def document_model_to_proto(doc_model: DocumentsIngested) -> mcp_pb2.Document:
-    """Converts a SQLAlchemy DocumentsIngested model to a Protobuf Document message."""
-    if not doc_model:
-        return None
-
-    doc_proto = mcp_pb2.Document(
-        ingestion_id=doc_model.ingestion_id,
-        file_name=doc_model.file_name,
-        source=doc_model.source,
-        status=doc_model.status,
-    )
-
-    if doc_model.file_url:
-        doc_proto.file_url = doc_model.file_url
-
-    if doc_model.metadata:
-        ParseDict(doc_model.metadata, doc_proto.metadata)
-
-    if doc_model.created_at:
-        created_at_ts = Timestamp()
-        created_at_ts.FromDatetime(doc_model.created_at)
-        doc_proto.created_at.CopyFrom(created_at_ts)
-
-    if doc_model.updated_at:
-        updated_at_ts = Timestamp()
-        updated_at_ts.FromDatetime(doc_model.updated_at)
-        doc_proto.updated_at.CopyFrom(updated_at_ts)
-
-    return doc_proto
-
-
-# --- gRPC Servicer Implementation ---
-
-class MCPServiceServicer(mcp_pb2_grpc.MCPServiceServicer):
-    """Provides methods that implement functionality of MCP service."""
+    def __init__(self):
+        self.llm_client = LLMClient()
 
     def SaveDocument(self, request, context):
-        logging.info(f"Received SaveDocument request for ingestion_id: {request.ingestion_id}")
-        metadata_dict = MessageToDict(request.metadata)
+        """Stores document metadata in the database."""
+        logging.info(f"SaveDocument called for ingestion_id: {request.ingestion_id}")
 
-        doc = repository.save_document_metadata(
+        # The gRPC metadata is a map<string, string>, which is dict-like
+        metadata_dict = dict(request.metadata)
+
+        # You can handle file_bytes here, e.g., save to a file system or blob storage.
+        # For now, we just acknowledge its presence.
+        if request.file_bytes:
+            logging.info(f"Received {len(request.file_bytes)} bytes for {request.ingestion_id}")
+
+        doc = repository.save_document(
             ingestion_id=request.ingestion_id,
-            file_name=request.file_name,
+            file_name="", # file_name is not in the new proto, pass empty
             file_url=request.file_url,
-            source=request.source,
-            metadata=metadata_dict,
-            status=request.status,
+            metadata=metadata_dict
         )
 
         if doc:
-            return mcp_pb2.SaveDocumentResponse(
-                ingestion_id=doc.ingestion_id,
-                message="Document metadata saved successfully."
+            return mcp_pb2.SaveDocResp(
+                ok=True,
+                doc_ref=doc.ingestion_id,
+                message="Document saved successfully."
             )
         else:
+            context.set_details(f"Failed to save document {request.ingestion_id}")
             context.set_code(grpc.StatusCode.INTERNAL)
-            context.set_details("Failed to save document metadata.")
-            return mcp_pb2.SaveDocumentResponse()
+            return mcp_pb2.SaveDocResp(ok=False, message="Database operation failed.")
 
     def GetDocument(self, request, context):
-        logging.info(f"Received GetDocument request for ingestion_id: {request.ingestion_id}")
-        doc_model = repository.get_document_by_ingestion_id(request.ingestion_id)
+        """Retrieves document metadata from the database."""
+        logging.info(f"GetDocument called for ingestion_id: {request.ingestion_id}")
 
-        if doc_model:
-            doc_proto = document_model_to_proto(doc_model)
-            return mcp_pb2.GetDocumentResponse(document=doc_proto)
+        doc = repository.get_document(request.ingestion_id)
+
+        if doc:
+            # Convert metadata from JSONB (dict) to map<string, string>
+            metadata_map = {k: str(v) for k, v in doc.metadata.items()} if doc.metadata else {}
+
+            return mcp_pb2.GetDocResp(
+                doc_ref=doc.ingestion_id,
+                file_url=doc.file_url or "",
+                file_bytes=b"",  # Not storing bytes in DB, return empty
+                metadata=metadata_map
+            )
         else:
-            context.set_code(grpc.StatusCode.NOT_FOUND)
             context.set_details(f"Document with ingestion_id '{request.ingestion_id}' not found.")
-            return mcp_pb2.GetDocumentResponse()
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            return mcp_pb2.GetDocResp()
 
-    def WriteMetric(self, request, context):
-        logging.info(f"Received WriteMetric request from agent: {request.agent}")
-        metrics_dict = MessageToDict(request.metrics)
-        tags_dict = MessageToDict(request.tags)
-        metric_ts_dt = request.metric_ts.ToDatetime()
+    def QueryLLM(self, request, context):
+        """Queries the fake LLM."""
+        logging.info(f"QueryLLM called with model: {request.model}")
 
-        repository.write_metric(
-            agent=request.agent,
-            ingestion_id=request.ingestion_id,
-            metric_ts=metric_ts_dt,
-            metrics_json=metrics_dict,
-            tags_json=tags_dict,
+        # Convert map<string, string> to dict
+        options_dict = dict(request.options)
+
+        result = self.llm_client.query(
+            prompt=request.prompt,
+            model=request.model,
+            options=options_dict
         )
 
-        return mcp_pb2.StatusResponse(success=True, message="Metric written successfully.")
+        return mcp_pb2.QueryLLMResp(
+            text=result.get("text", ""),
+            confidence=result.get("confidence", 0.0),
+            raw_response=result.get("raw_response", "")
+        )
+
+    def WriteMetric(self, request, context):
+        """Writes a metric to the database."""
+        logging.info(f"WriteMetric called for agent: {request.agent}")
+
+        success = repository.write_metric(
+            agent=request.agent,
+            ingestion_id=request.ingestion_id,
+            metric_json=request.metric_json,
+            metric_ts=request.metric_ts
+        )
+
+        if not success:
+            context.set_details("Failed to write metric to database.")
+            context.set_code(grpc.StatusCode.INTERNAL)
+
+        return mcp_pb2.WriteAck(ok=success)
 
     def WriteAudit(self, request, context):
-        logging.info(f"Received WriteAudit request from agent: {request.agent} for action: {request.action}")
-        payload_dict = MessageToDict(request.payload)
+        """Writes an audit event to the database."""
+        logging.info(f"WriteAudit called for agent: {request.agent}, action: {request.action}")
 
-        repository.write_audit(
+        success = repository.write_audit(
             agent=request.agent,
             action=request.action,
             reference_id=request.reference_id,
-            payload_json=payload_dict,
+            payload_json=request.payload_json,
+            ts=request.ts
         )
 
-        return mcp_pb2.StatusResponse(success=True, message="Audit event written successfully.")
+        if not success:
+            context.set_details("Failed to write audit event to database.")
+            context.set_code(grpc.StatusCode.INTERNAL)
 
-    def QueryLLM(self, request, context):
-        logging.info("Received QueryLLM request.")
-        context_dict = MessageToDict(request.context)
+        return mcp_pb2.WriteAck(ok=success)
 
-        response = llm_client.query(request.prompt, context_dict)
-
-        response_proto = mcp_pb2.QueryLLMResponse(
-            response_text=response.get("response_text", "")
-        )
-        if "metadata" in response and isinstance(response["metadata"], dict):
-            ParseDict(response["metadata"], response_proto.metadata)
-
-        return response_proto
-
-
-# --- Server Setup ---
 
 def serve():
-    """Starts the gRPC server."""
+    """Starts the gRPC server and waits for termination."""
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    mcp_pb2_grpc.add_MCPServiceServicer_to_server(MCPServiceServicer(), server)
+    mcp_pb2_grpc.add_MCPServicer_to_server(MCPServicer(), server)
     server.add_insecure_port('[::]:50051')
     server.start()
-    logging.info("MCP gRPC server started on port 50051.")
+    logging.info("MCP gRPC server started on port 50051")
     server.wait_for_termination()
 
 if __name__ == '__main__':

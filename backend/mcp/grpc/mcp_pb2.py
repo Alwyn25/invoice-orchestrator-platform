@@ -22,37 +22,45 @@ _runtime_version.ValidateProtobufRuntimeVersion(
 _sym_db = _symbol_database.Default()
 
 
-from google.protobuf import struct_pb2 as google_dot_protobuf_dot_struct__pb2
-from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\tmcp.proto\x12\x03mcp\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xad\x01\n\x13SaveDocumentRequest\x12\x14\n\x0cingestion_id\x18\x01 \x01(\t\x12\x11\n\tfile_name\x18\x02 \x01(\t\x12\x15\n\x08\x66ile_url\x18\x03 \x01(\tH\x00\x88\x01\x01\x12\x0e\n\x06source\x18\x04 \x01(\t\x12)\n\x08metadata\x18\x05 \x01(\x0b\x32\x17.google.protobuf.Struct\x12\x0e\n\x06status\x18\x06 \x01(\tB\x0b\n\t_file_url\"=\n\x14SaveDocumentResponse\x12\x14\n\x0cingestion_id\x18\x01 \x01(\t\x12\x0f\n\x07message\x18\x02 \x01(\t\"*\n\x12GetDocumentRequest\x12\x14\n\x0cingestion_id\x18\x01 \x01(\t\"\x82\x02\n\x08\x44ocument\x12\x14\n\x0cingestion_id\x18\x01 \x01(\t\x12\x11\n\tfile_name\x18\x02 \x01(\t\x12\x15\n\x08\x66ile_url\x18\x03 \x01(\tH\x00\x88\x01\x01\x12\x0e\n\x06source\x18\x04 \x01(\t\x12)\n\x08metadata\x18\x05 \x01(\x0b\x32\x17.google.protobuf.Struct\x12\x0e\n\x06status\x18\x06 \x01(\t\x12.\n\ncreated_at\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12.\n\nupdated_at\x18\x08 \x01(\x0b\x32\x1a.google.protobuf.TimestampB\x0b\n\t_file_url\"6\n\x13GetDocumentResponse\x12\x1f\n\x08\x64ocument\x18\x01 \x01(\x0b\x32\r.mcp.Document\"\xcf\x01\n\x12WriteMetricRequest\x12\r\n\x05\x61gent\x18\x01 \x01(\t\x12\x19\n\x0cingestion_id\x18\x02 \x01(\tH\x00\x88\x01\x01\x12-\n\tmetric_ts\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12(\n\x07metrics\x18\x04 \x01(\x0b\x32\x17.google.protobuf.Struct\x12%\n\x04tags\x18\x05 \x01(\x0b\x32\x17.google.protobuf.StructB\x0f\n\r_ingestion_id\"r\n\x11WriteAuditRequest\x12\r\n\x05\x61gent\x18\x01 \x01(\t\x12\x0e\n\x06\x61\x63tion\x18\x02 \x01(\t\x12\x14\n\x0creference_id\x18\x03 \x01(\t\x12(\n\x07payload\x18\x04 \x01(\x0b\x32\x17.google.protobuf.Struct\"K\n\x0fQueryLLMRequest\x12\x0e\n\x06prompt\x18\x01 \x01(\t\x12(\n\x07\x63ontext\x18\x02 \x01(\x0b\x32\x17.google.protobuf.Struct\"T\n\x10QueryLLMResponse\x12\x15\n\rresponse_text\x18\x01 \x01(\t\x12)\n\x08metadata\x18\x02 \x01(\x0b\x32\x17.google.protobuf.Struct\"2\n\x0eStatusResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t2\xc4\x02\n\nMCPService\x12\x43\n\x0cSaveDocument\x12\x18.mcp.SaveDocumentRequest\x1a\x19.mcp.SaveDocumentResponse\x12@\n\x0bGetDocument\x12\x17.mcp.GetDocumentRequest\x1a\x18.mcp.GetDocumentResponse\x12;\n\x0bWriteMetric\x12\x17.mcp.WriteMetricRequest\x1a\x13.mcp.StatusResponse\x12\x39\n\nWriteAudit\x12\x16.mcp.WriteAuditRequest\x1a\x13.mcp.StatusResponse\x12\x37\n\x08QueryLLM\x12\x14.mcp.QueryLLMRequest\x1a\x15.mcp.QueryLLMResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\tmcp.proto\x12\x03mcp\"\xaa\x01\n\nSaveDocReq\x12\x14\n\x0cingestion_id\x18\x01 \x01(\t\x12\x12\n\nfile_bytes\x18\x02 \x01(\x0c\x12\x10\n\x08\x66ile_url\x18\x03 \x01(\t\x12/\n\x08metadata\x18\x04 \x03(\x0b\x32\x1d.mcp.SaveDocReq.MetadataEntry\x1a/\n\rMetadataEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\";\n\x0bSaveDocResp\x12\n\n\x02ok\x18\x01 \x01(\x08\x12\x0f\n\x07\x64oc_ref\x18\x02 \x01(\t\x12\x0f\n\x07message\x18\x03 \x01(\t\"!\n\tGetDocReq\x12\x14\n\x0cingestion_id\x18\x01 \x01(\t\"\xa5\x01\n\nGetDocResp\x12\x0f\n\x07\x64oc_ref\x18\x01 \x01(\t\x12\x10\n\x08\x66ile_url\x18\x02 \x01(\t\x12\x12\n\nfile_bytes\x18\x03 \x01(\x0c\x12/\n\x08metadata\x18\x04 \x03(\x0b\x32\x1d.mcp.GetDocResp.MetadataEntry\x1a/\n\rMetadataEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x8c\x01\n\x0bQueryLLMReq\x12\x0e\n\x06prompt\x18\x01 \x01(\t\x12\r\n\x05model\x18\x02 \x01(\t\x12.\n\x07options\x18\x03 \x03(\x0b\x32\x1d.mcp.QueryLLMReq.OptionsEntry\x1a.\n\x0cOptionsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"F\n\x0cQueryLLMResp\x12\x0c\n\x04text\x18\x01 \x01(\t\x12\x12\n\nconfidence\x18\x02 \x01(\x02\x12\x14\n\x0craw_response\x18\x03 \x01(\t\"]\n\x0eWriteMetricReq\x12\r\n\x05\x61gent\x18\x01 \x01(\t\x12\x14\n\x0cingestion_id\x18\x02 \x01(\t\x12\x13\n\x0bmetric_json\x18\x03 \x01(\t\x12\x11\n\tmetric_ts\x18\x04 \x01(\x03\"\x16\n\x08WriteAck\x12\n\n\x02ok\x18\x01 \x01(\x08\"f\n\rWriteAuditReq\x12\r\n\x05\x61gent\x18\x01 \x01(\t\x12\x0e\n\x06\x61\x63tion\x18\x02 \x01(\t\x12\x14\n\x0creference_id\x18\x03 \x01(\t\x12\x14\n\x0cpayload_json\x18\x04 \x01(\t\x12\n\n\x02ts\x18\x05 \x01(\x03\x32\xfd\x01\n\x03MCP\x12\x31\n\x0cSaveDocument\x12\x0f.mcp.SaveDocReq\x1a\x10.mcp.SaveDocResp\x12.\n\x0bGetDocument\x12\x0e.mcp.GetDocReq\x1a\x0f.mcp.GetDocResp\x12/\n\x08QueryLLM\x12\x10.mcp.QueryLLMReq\x1a\x11.mcp.QueryLLMResp\x12\x31\n\x0bWriteMetric\x12\x13.mcp.WriteMetricReq\x1a\r.mcp.WriteAck\x12/\n\nWriteAudit\x12\x12.mcp.WriteAuditReq\x1a\r.mcp.WriteAckb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'mcp_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
-  _globals['_SAVEDOCUMENTREQUEST']._serialized_start=82
-  _globals['_SAVEDOCUMENTREQUEST']._serialized_end=255
-  _globals['_SAVEDOCUMENTRESPONSE']._serialized_start=257
-  _globals['_SAVEDOCUMENTRESPONSE']._serialized_end=318
-  _globals['_GETDOCUMENTREQUEST']._serialized_start=320
-  _globals['_GETDOCUMENTREQUEST']._serialized_end=362
-  _globals['_DOCUMENT']._serialized_start=365
-  _globals['_DOCUMENT']._serialized_end=623
-  _globals['_GETDOCUMENTRESPONSE']._serialized_start=625
-  _globals['_GETDOCUMENTRESPONSE']._serialized_end=679
-  _globals['_WRITEMETRICREQUEST']._serialized_start=682
-  _globals['_WRITEMETRICREQUEST']._serialized_end=889
-  _globals['_WRITEAUDITREQUEST']._serialized_start=891
-  _globals['_WRITEAUDITREQUEST']._serialized_end=1005
-  _globals['_QUERYLLMREQUEST']._serialized_start=1007
-  _globals['_QUERYLLMREQUEST']._serialized_end=1082
-  _globals['_QUERYLLMRESPONSE']._serialized_start=1084
-  _globals['_QUERYLLMRESPONSE']._serialized_end=1168
-  _globals['_STATUSRESPONSE']._serialized_start=1170
-  _globals['_STATUSRESPONSE']._serialized_end=1220
-  _globals['_MCPSERVICE']._serialized_start=1223
-  _globals['_MCPSERVICE']._serialized_end=1547
+  _globals['_SAVEDOCREQ_METADATAENTRY']._loaded_options = None
+  _globals['_SAVEDOCREQ_METADATAENTRY']._serialized_options = b'8\001'
+  _globals['_GETDOCRESP_METADATAENTRY']._loaded_options = None
+  _globals['_GETDOCRESP_METADATAENTRY']._serialized_options = b'8\001'
+  _globals['_QUERYLLMREQ_OPTIONSENTRY']._loaded_options = None
+  _globals['_QUERYLLMREQ_OPTIONSENTRY']._serialized_options = b'8\001'
+  _globals['_SAVEDOCREQ']._serialized_start=19
+  _globals['_SAVEDOCREQ']._serialized_end=189
+  _globals['_SAVEDOCREQ_METADATAENTRY']._serialized_start=142
+  _globals['_SAVEDOCREQ_METADATAENTRY']._serialized_end=189
+  _globals['_SAVEDOCRESP']._serialized_start=191
+  _globals['_SAVEDOCRESP']._serialized_end=250
+  _globals['_GETDOCREQ']._serialized_start=252
+  _globals['_GETDOCREQ']._serialized_end=285
+  _globals['_GETDOCRESP']._serialized_start=288
+  _globals['_GETDOCRESP']._serialized_end=453
+  _globals['_GETDOCRESP_METADATAENTRY']._serialized_start=142
+  _globals['_GETDOCRESP_METADATAENTRY']._serialized_end=189
+  _globals['_QUERYLLMREQ']._serialized_start=456
+  _globals['_QUERYLLMREQ']._serialized_end=596
+  _globals['_QUERYLLMREQ_OPTIONSENTRY']._serialized_start=550
+  _globals['_QUERYLLMREQ_OPTIONSENTRY']._serialized_end=596
+  _globals['_QUERYLLMRESP']._serialized_start=598
+  _globals['_QUERYLLMRESP']._serialized_end=668
+  _globals['_WRITEMETRICREQ']._serialized_start=670
+  _globals['_WRITEMETRICREQ']._serialized_end=763
+  _globals['_WRITEACK']._serialized_start=765
+  _globals['_WRITEACK']._serialized_end=787
+  _globals['_WRITEAUDITREQ']._serialized_start=789
+  _globals['_WRITEAUDITREQ']._serialized_end=891
+  _globals['_MCP']._serialized_start=894
+  _globals['_MCP']._serialized_end=1147
 # @@protoc_insertion_point(module_scope)
