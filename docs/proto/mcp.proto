@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package mcp;
+
+message SaveDocReq {
+  string ingestion_id = 1;
+  string file_name = 2;
+  bytes file_bytes = 3;
+  string file_url = 4;
+  map<string,string> metadata = 5;
+}
+
+message SaveDocResp {
+  bool ok = 1;
+  string doc_ref = 2;
+  string message = 3;
+}
+
+message GetDocReq {
+  string ingestion_id = 1;
+}
+
+message GetDocResp {
+  string doc_ref = 1;
+  string file_url = 2;
+  bytes file_bytes = 3;
+  map<string,string> metadata = 4;
+}
+
+message QueryLLMReq {
+  string prompt = 1;
+  string model = 2;
+  map<string,string> options = 3;
+}
+
+message QueryLLMResp {
+  string text = 1;
+  float confidence = 2;
+  string raw_response = 3;
+}
+
+message WriteMetricReq {
+  string agent = 1;
+  string ingestion_id = 2;
+  string metric_json = 3;
+  int64 metric_ts = 4;
+}
+
+message WriteAck {
+  bool ok = 1;
+}
+
+message WriteAuditReq {
+  string agent = 1;
+  string action = 2;
+  string reference_id = 3;
+  string payload_json = 4;
+  int64 ts = 5;
+}
+
+message OrchestrationState {
+  string ingestion_id = 1;
+  bytes state_bytes = 2;
+}
+
+service MCP {
+  rpc SaveDocument(SaveDocReq) returns (SaveDocResp);
+  rpc GetDocument(GetDocReq) returns (GetDocResp);
+  rpc QueryLLM(QueryLLMReq) returns (QueryLLMResp);
+  rpc WriteMetric(WriteMetricReq) returns (WriteAck);
+  rpc WriteAudit(WriteAuditReq) returns (WriteAck);
+  rpc SaveOrchestration(OrchestrationState) returns (WriteAck);
+  rpc GetOrchestration(GetDocReq) returns (OrchestrationState);
+}
