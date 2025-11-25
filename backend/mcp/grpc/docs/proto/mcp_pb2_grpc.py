@@ -3,7 +3,7 @@
 import grpc
 import warnings
 
-from . import mcp_pb2 as mcp__pb2
+from docs.proto import mcp_pb2 as docs_dot_proto_dot_mcp__pb2
 
 GRPC_GENERATED_VERSION = '1.76.0'
 GRPC_VERSION = grpc.__version__
@@ -18,7 +18,7 @@ except ImportError:
 if _version_not_supported:
     raise RuntimeError(
         f'The grpc package installed is at version {GRPC_VERSION},'
-        + ' but the generated code in mcp_pb2_grpc.py depends on'
+        + ' but the generated code in docs/proto/mcp_pb2_grpc.py depends on'
         + f' grpcio>={GRPC_GENERATED_VERSION}.'
         + f' Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}'
         + f' or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.'
@@ -36,28 +36,28 @@ class MCPStub(object):
         """
         self.SaveDocument = channel.unary_unary(
                 '/mcp.MCP/SaveDocument',
-                request_serializer=mcp__pb2.SaveDocReq.SerializeToString,
-                response_deserializer=mcp__pb2.SaveDocResp.FromString,
+                request_serializer=docs_dot_proto_dot_mcp__pb2.SaveDocReq.SerializeToString,
+                response_deserializer=docs_dot_proto_dot_mcp__pb2.SaveDocResp.FromString,
                 _registered_method=True)
         self.GetDocument = channel.unary_unary(
                 '/mcp.MCP/GetDocument',
-                request_serializer=mcp__pb2.GetDocReq.SerializeToString,
-                response_deserializer=mcp__pb2.GetDocResp.FromString,
+                request_serializer=docs_dot_proto_dot_mcp__pb2.GetDocReq.SerializeToString,
+                response_deserializer=docs_dot_proto_dot_mcp__pb2.GetDocResp.FromString,
                 _registered_method=True)
         self.QueryLLM = channel.unary_unary(
                 '/mcp.MCP/QueryLLM',
-                request_serializer=mcp__pb2.QueryLLMReq.SerializeToString,
-                response_deserializer=mcp__pb2.QueryLLMResp.FromString,
+                request_serializer=docs_dot_proto_dot_mcp__pb2.QueryLLMReq.SerializeToString,
+                response_deserializer=docs_dot_proto_dot_mcp__pb2.QueryLLMResp.FromString,
                 _registered_method=True)
         self.WriteMetric = channel.unary_unary(
                 '/mcp.MCP/WriteMetric',
-                request_serializer=mcp__pb2.WriteMetricReq.SerializeToString,
-                response_deserializer=mcp__pb2.WriteAck.FromString,
+                request_serializer=docs_dot_proto_dot_mcp__pb2.WriteMetricReq.SerializeToString,
+                response_deserializer=docs_dot_proto_dot_mcp__pb2.WriteAck.FromString,
                 _registered_method=True)
         self.WriteAudit = channel.unary_unary(
                 '/mcp.MCP/WriteAudit',
-                request_serializer=mcp__pb2.WriteAuditReq.SerializeToString,
-                response_deserializer=mcp__pb2.WriteAck.FromString,
+                request_serializer=docs_dot_proto_dot_mcp__pb2.WriteAuditReq.SerializeToString,
+                response_deserializer=docs_dot_proto_dot_mcp__pb2.WriteAck.FromString,
                 _registered_method=True)
 
 
@@ -99,28 +99,28 @@ def add_MCPServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'SaveDocument': grpc.unary_unary_rpc_method_handler(
                     servicer.SaveDocument,
-                    request_deserializer=mcp__pb2.SaveDocReq.FromString,
-                    response_serializer=mcp__pb2.SaveDocResp.SerializeToString,
+                    request_deserializer=docs_dot_proto_dot_mcp__pb2.SaveDocReq.FromString,
+                    response_serializer=docs_dot_proto_dot_mcp__pb2.SaveDocResp.SerializeToString,
             ),
             'GetDocument': grpc.unary_unary_rpc_method_handler(
                     servicer.GetDocument,
-                    request_deserializer=mcp__pb2.GetDocReq.FromString,
-                    response_serializer=mcp__pb2.GetDocResp.SerializeToString,
+                    request_deserializer=docs_dot_proto_dot_mcp__pb2.GetDocReq.FromString,
+                    response_serializer=docs_dot_proto_dot_mcp__pb2.GetDocResp.SerializeToString,
             ),
             'QueryLLM': grpc.unary_unary_rpc_method_handler(
                     servicer.QueryLLM,
-                    request_deserializer=mcp__pb2.QueryLLMReq.FromString,
-                    response_serializer=mcp__pb2.QueryLLMResp.SerializeToString,
+                    request_deserializer=docs_dot_proto_dot_mcp__pb2.QueryLLMReq.FromString,
+                    response_serializer=docs_dot_proto_dot_mcp__pb2.QueryLLMResp.SerializeToString,
             ),
             'WriteMetric': grpc.unary_unary_rpc_method_handler(
                     servicer.WriteMetric,
-                    request_deserializer=mcp__pb2.WriteMetricReq.FromString,
-                    response_serializer=mcp__pb2.WriteAck.SerializeToString,
+                    request_deserializer=docs_dot_proto_dot_mcp__pb2.WriteMetricReq.FromString,
+                    response_serializer=docs_dot_proto_dot_mcp__pb2.WriteAck.SerializeToString,
             ),
             'WriteAudit': grpc.unary_unary_rpc_method_handler(
                     servicer.WriteAudit,
-                    request_deserializer=mcp__pb2.WriteAuditReq.FromString,
-                    response_serializer=mcp__pb2.WriteAck.SerializeToString,
+                    request_deserializer=docs_dot_proto_dot_mcp__pb2.WriteAuditReq.FromString,
+                    response_serializer=docs_dot_proto_dot_mcp__pb2.WriteAck.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -148,8 +148,8 @@ class MCP(object):
             request,
             target,
             '/mcp.MCP/SaveDocument',
-            mcp__pb2.SaveDocReq.SerializeToString,
-            mcp__pb2.SaveDocResp.FromString,
+            docs_dot_proto_dot_mcp__pb2.SaveDocReq.SerializeToString,
+            docs_dot_proto_dot_mcp__pb2.SaveDocResp.FromString,
             options,
             channel_credentials,
             insecure,
@@ -175,8 +175,8 @@ class MCP(object):
             request,
             target,
             '/mcp.MCP/GetDocument',
-            mcp__pb2.GetDocReq.SerializeToString,
-            mcp__pb2.GetDocResp.FromString,
+            docs_dot_proto_dot_mcp__pb2.GetDocReq.SerializeToString,
+            docs_dot_proto_dot_mcp__pb2.GetDocResp.FromString,
             options,
             channel_credentials,
             insecure,
@@ -202,8 +202,8 @@ class MCP(object):
             request,
             target,
             '/mcp.MCP/QueryLLM',
-            mcp__pb2.QueryLLMReq.SerializeToString,
-            mcp__pb2.QueryLLMResp.FromString,
+            docs_dot_proto_dot_mcp__pb2.QueryLLMReq.SerializeToString,
+            docs_dot_proto_dot_mcp__pb2.QueryLLMResp.FromString,
             options,
             channel_credentials,
             insecure,
@@ -229,8 +229,8 @@ class MCP(object):
             request,
             target,
             '/mcp.MCP/WriteMetric',
-            mcp__pb2.WriteMetricReq.SerializeToString,
-            mcp__pb2.WriteAck.FromString,
+            docs_dot_proto_dot_mcp__pb2.WriteMetricReq.SerializeToString,
+            docs_dot_proto_dot_mcp__pb2.WriteAck.FromString,
             options,
             channel_credentials,
             insecure,
@@ -256,8 +256,8 @@ class MCP(object):
             request,
             target,
             '/mcp.MCP/WriteAudit',
-            mcp__pb2.WriteAuditReq.SerializeToString,
-            mcp__pb2.WriteAck.FromString,
+            docs_dot_proto_dot_mcp__pb2.WriteAuditReq.SerializeToString,
+            docs_dot_proto_dot_mcp__pb2.WriteAck.FromString,
             options,
             channel_credentials,
             insecure,

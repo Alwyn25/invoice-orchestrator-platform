@@ -101,5 +101,36 @@ services:
     ports:
       - "6006:6006"
 
+  gateway:
+    build:
+      context: .
+      dockerfile: backend/gateway/Dockerfile
+    container_name: gateway
+    depends_on:
+      - mcp
+      - extraction-agent
+      - mapping-agent
+      - validation-agent
+      - report-agent
+      - conversion-agent
+      - integration-agent
+    environment:
+      - MCP_HOST=mcp
+      - MCP_PORT=50051
+      - EXTRACTION_AGENT_HOST=extraction-agent
+      - EXTRACTION_AGENT_PORT=6001
+      - MAPPING_AGENT_HOST=mapping-agent
+      - MAPPING_AGENT_PORT=6002
+      - VALIDATION_AGENT_HOST=validation-agent
+      - VALIDATION_AGENT_PORT=6003
+      - REPORT_AGENT_HOST=report-agent
+      - REPORT_AGENT_PORT=6004
+      - CONVERSION_AGENT_HOST=conversion-agent
+      - CONVERSION_AGENT_PORT=6005
+      - INTEGRATION_AGENT_HOST=integration-agent
+      - INTEGRATION_AGENT_PORT=6006
+    ports:
+      - "8000:8000"
+
 volumes:
   postgres_data:
