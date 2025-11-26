@@ -1,6 +1,9 @@
 # Use Python 3.12 as the base image to maintain consistency
 FROM python:3.12-slim
 
+# Install Tesseract OCR and Poppler for PDF processing
+RUN apt-get update && apt-get install -y tesseract-ocr poppler-utils
+
 # Set the working directory
 WORKDIR /app
 
@@ -14,7 +17,6 @@ COPY pyproject.toml uv.lock* ./
 RUN uv pip sync --no-cache-dir --system uv.lock
 
 # Copy all necessary source code
-# Copying the entire backend is simpler for monorepo setups
 COPY backend/ /app/backend/
 
 # Set the Python path to the app root

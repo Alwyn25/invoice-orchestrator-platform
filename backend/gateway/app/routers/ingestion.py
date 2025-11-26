@@ -32,11 +32,14 @@ async def upload_ingestion(
     if not file_url:
         raise HTTPException(status_code=400, detail="file_url must be provided in the payload if no file is uploaded.")
 
+    file_bytes = await file.read() if file else None
+
     mcp_client.save_document(
         ingestion_id=ingestion_id,
         file_name=file.filename if file else file_url.split("/")[-1],
         file_url=file_url,
-        metadata=metadata
+        metadata=metadata,
+        file_bytes=file_bytes,
     )
 
     agents_client.start_ocr(

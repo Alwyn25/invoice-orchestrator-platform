@@ -13,12 +13,13 @@ class MCPClient:
         channel = grpc.insecure_channel(f"{settings.MCP_HOST}:{settings.MCP_PORT}")
         self.stub = mcp_pb2_grpc.MCPStub(channel)
 
-    def save_document(self, ingestion_id: str, file_name: str, file_url: Optional[str], metadata: dict) -> mcp_pb2.SaveDocResp:
+    def save_document(self, ingestion_id: str, file_name: str, file_url: Optional[str], metadata: dict, file_bytes: Optional[bytes] = None) -> mcp_pb2.SaveDocResp:
         request = mcp_pb2.SaveDocReq(
             ingestion_id=ingestion_id,
             file_name=file_name,
             file_url=file_url,
             metadata=metadata,
+            file_bytes=file_bytes,
         )
         return self.stub.SaveDocument(request)
 
@@ -59,4 +60,43 @@ class MCPClient:
         response = self.stub.GetOrchestration(request)
         if response and response.ingestion_id:
             return json.loads(response.state_bytes.decode('utf-8'))
+        return None
+
+    def get_ocr_output(self, ocr_id: str):
+        request = mcp_pb2.GetDocReq(ingestion_id=ocr_id)
+        response = self.stub.GetOcrOutput(request)
+        if response and response.ocr_id:
+            return {
+                "ocr_id": response.ocr_id,
+                "ingestion_id": response.ingestion_id,
+                "raw_text": response.raw_text,
+                "detected_fields": json.loads(response.detected_fields.decode('utf-8')),
+                "confidence": response.confidence,
+                "status": response.status,
+            }
+        return None
+
+    def get_mapped_schema(self, schema_id: str):
+        request = mcp_pb2.GetDocReq(ingestion_id=schema_id)
+        response = self.stub.GetMappedSchema(request)
+        if response and response.schema_id:
+            return {
+                "schema_id": response.schema_id,
+                "ocr_id": response.ocr_id,
+                "mapped_data": json.loads(response.mapped_data.decode('utf-8')),
+                "mapping_confidence": response.mapping_confidence,
+            }
+        return None
+
+    def get_validation_logs(self, validation_id: str):
+        request = mcp_pb2.GetDocReq(ingestion_id=validation_id)
+        response = self.stub.GetValidationLogs(request)
+        if response and response.validation_id:
+            return {
+                "validation_id": response.validation_id,
+                "schema_id": response.schema_id,
+                "status": response.status,
+                "errors": json.loads(response.errors.decode('utf-8')),
+                "warnings": json.loads(response.warnings.decode('utf-8')),
+            }
         return None
