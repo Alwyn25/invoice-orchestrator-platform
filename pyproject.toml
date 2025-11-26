@@ -1,0 +1,26 @@
+[project]
+name = "app"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "alembic>=1.17.2",
+    "fastapi>=0.122.0",
+    "grpcio>=1.76.0",
+    "grpcio-tools>=1.76.0",
+    "httpx>=0.28.1",
+    "langgraph>=1.0.3",
+    "loguru>=0.7.3",
+    "pdf2image>=1.17.0",
+    "pillow>=12.0.0",
+    "psycopg2-binary>=2.9.11",
+    "pydantic-settings>=2.12.0",
+    "pydantic[dotenv]>=2.12.4",
+    "pytesseract>=0.3.13",
+    "pytest>=9.0.1",
+    "python-dotenv>=1.2.1",
+    "sqlalchemy>=2.0.44",
+    "tenacity>=9.1.2",
+    "uvicorn[standard]>=0.38.0",
+]
