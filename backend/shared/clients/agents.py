@@ -1,5 +1,5 @@
 import grpc
-from backend.agents import agent_comm_pb2, agent_comm_pb2_grpc
+from backend.shared.grpc import agent_comm_pb2, agent_comm_pb2_grpc
 from backend.shared.dependencies.config import get_settings
 
 class AgentsClient:

@@ -116,3 +116,30 @@ def get_orchestration(ingestion_id: str):
     except Exception as e:
         logging.error(f"Error getting orchestration state for {ingestion_id}: {e}")
         return None
+
+def get_ocr_output(ocr_id: str):
+    """Retrieves OCR output."""
+    try:
+        with SessionLocal() as session:
+            return session.query(OcrOutput).filter(OcrOutput.ocr_id == ocr_id).first()
+    except Exception as e:
+        logging.error(f"Error getting ocr output for {ocr_id}: {e}")
+        return None
+
+def get_mapped_schema(schema_id: str):
+    """Retrieves a mapped schema."""
+    try:
+        with SessionLocal() as session:
+            return session.query(MappedSchema).filter(MappedSchema.schema_id == schema_id).first()
+    except Exception as e:
+        logging.error(f"Error getting mapped schema for {schema_id}: {e}")
+        return None
+
+def get_validation_logs(validation_id: str):
+    """Retrieves validation logs."""
+    try:
+        with SessionLocal() as session:
+            return session.query(ValidationLogs).filter(ValidationLogs.validation_id == validation_id).first()
+    except Exception as e:
+        logging.error(f"Error getting validation logs for {validation_id}: {e}")
+        return None

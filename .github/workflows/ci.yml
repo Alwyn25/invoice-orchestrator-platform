@@ -1,0 +1,35 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.12"
+    - name: Install dependencies
+      run: |
+        pip install uv
+        uv pip install --system .
+    - name: Run tests
+      run: |
+        pytest
+
+  docker-build:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [mcp, gateway, extraction_agent, mapping_agent, validation_agent, report_agent, conversion_agent, integration_agent, orchestrator]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build . --file backend/${{ matrix.service }}/Dockerfile --tag ${{ matrix.service }}:$(echo $GITHUB_SHA | cut -c1-7)

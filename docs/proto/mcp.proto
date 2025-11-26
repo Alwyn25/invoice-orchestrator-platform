@@ -25,6 +25,7 @@ message GetDocResp {
   string file_url = 2;
   bytes file_bytes = 3;
   map<string,string> metadata = 4;
+  string file_name = 5;
 }
 
 message QueryLLMReq {
@@ -71,4 +72,31 @@ service MCP {
   rpc WriteAudit(WriteAuditReq) returns (WriteAck);
   rpc SaveOrchestration(OrchestrationState) returns (WriteAck);
   rpc GetOrchestration(GetDocReq) returns (OrchestrationState);
+  rpc GetOcrOutput(GetDocReq) returns (OcrOutput);
+  rpc GetMappedSchema(GetDocReq) returns (MappedSchema);
+  rpc GetValidationLogs(GetDocReq) returns (ValidationLogs);
+}
+
+message OcrOutput {
+  string ocr_id = 1;
+  string ingestion_id = 2;
+  string raw_text = 3;
+  bytes detected_fields = 4;
+  float confidence = 5;
+  string status = 6;
+}
+
+message MappedSchema {
+    string schema_id = 1;
+    string ocr_id = 2;
+    bytes mapped_data = 3;
+    float mapping_confidence = 4;
+}
+
+message ValidationLogs {
+    string validation_id = 1;
+    string schema_id = 2;
+    string status = 3;
+    bytes errors = 4;
+    bytes warnings = 5;
 }
