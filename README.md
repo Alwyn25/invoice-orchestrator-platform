@@ -251,7 +251,7 @@ python -m grpc_tools.protoc \
   docs/proto/mcp.proto
 ```
 
----
+## Environment Variables
 
 # 🐳 Running Full System with Docker Compose
 
@@ -443,7 +443,10 @@ Response:
 }
 ```
 
----
+- **Ports in use**: Make sure no other services are running on ports `8000`, `8100`, `50051`, or `6001`-`6006`.
+- **gRPC stub mismatch**: Regenerate the stubs with the command in the Development Guide.
+- **Postgres auth**: Check the `DATABASE_URL` environment variable.
+- **Missing environment variables**: Make sure all required environment variables are set.
 
 # 🚀 Roadmap
 
@@ -454,7 +457,7 @@ Response:
 * Add frontend dashboard (Next.js)
 * Deploy to Kubernetes
 
----
+## License
 
 # 🙌 Conclusion
 
